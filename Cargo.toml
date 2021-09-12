@@ -15,9 +15,3 @@ debug = ["bevy_prototype_debug_lines"]
 bevy = "0.5"
 bevy_prototype_debug_lines = { version = "0.3", optional = true }
 rand = "0.8"
-
-[workspace]
-members = [
-    "examples/2D/2d_line",
-    "examples/2D/2d_cloth"
-]

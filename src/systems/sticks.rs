@@ -1,5 +1,5 @@
 use crate::components::{VerletLocked, VerletStick};
-#[cfg(feature = "3D")]
+#[cfg(feature = "2D")]
 use crate::components::{VerletPoint2D, VerletPoint2Influence};
 #[cfg(feature = "3D")]
 use crate::components::{VerletPoint3D, VerletPoint3Influence};

@@ -67,7 +67,7 @@ impl Plugin for BevyVerletPlugin {
                     .system()
                     .after("2d_points"),
             );
-            #[cfg(feature = "2D")]
+            #[cfg(feature = "3D")]
             app.add_system(
                 systems::sticks::debug_draw_3d_sticks
                     .system()
