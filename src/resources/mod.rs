@@ -1,3 +1,3 @@
-pub use gravity::*;
+pub use config::*;
 
-mod gravity;
+mod config;

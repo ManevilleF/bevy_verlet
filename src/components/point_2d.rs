@@ -1,4 +1,4 @@
-use bevy::math::Vec2;
+use bevy::math::{Vec2, Vec3};
 
 #[derive(Debug, Clone)]
 pub struct VerletPoint2 {
@@ -20,6 +20,10 @@ impl VerletPoint2 {
 
     pub fn velocity(&self) -> Vec2 {
         self.current_position - self.old_position
+    }
+
+    pub fn vec3_position(&self) -> Vec3 {
+        Vec3::new(self.current_position.x, self.current_position.y, 0.)
     }
 }
 

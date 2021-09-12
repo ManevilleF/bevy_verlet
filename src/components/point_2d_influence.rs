@@ -13,3 +13,9 @@ impl VerletPoint2Influence {
         }
     }
 }
+
+impl Default for VerletPoint2Influence {
+    fn default() -> Self {
+        Self { new_position: None }
+    }
+}

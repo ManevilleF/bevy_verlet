@@ -1,2 +1,3 @@
 # bevy_verlet
-Verlet points and sticks implementatio for bevy
+
+Verlet points and sticks implementation for bevy
