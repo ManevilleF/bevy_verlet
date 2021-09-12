@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 use bevy_verlet::{
-    BevyVerletPlugin, VerletLocked, VerletPoint2, VerletPointSpriteBundle, VerletStick,
+    BevyVerletPlugin, VerletLocked, VerletPoint2D, VerletPointSpriteBundle, VerletStick,
 };
 
 fn main() {
@@ -27,7 +27,7 @@ fn setup(mut commands: Commands, mut materials: ResMut<Assets<ColorMaterial>>) {
     for j in 0..points_y_count {
         for i in 0..points_x_count {
             let mut cmd = commands.spawn_bundle(VerletPointSpriteBundle {
-                verlet_point: VerletPoint2::new(Vec2::new(
+                verlet_point: VerletPoint2D::new(Vec2::new(
                     origin_x + (30. * i as f32),
                     origin_y + (-30. * j as f32),
                 )),

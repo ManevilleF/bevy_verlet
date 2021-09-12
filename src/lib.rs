@@ -7,6 +7,7 @@ mod systems;
 
 use bevy::core::FixedTimestep;
 use bevy::prelude::*;
+#[cfg(feature = "debug")]
 use bevy_prototype_debug_lines::DebugLinesPlugin;
 
 pub struct BevyVerletPlugin {
@@ -36,6 +37,27 @@ impl Plugin for BevyVerletPlugin {
             };
             app.add_system_set(system_set);
         }
+        #[cfg(feature = "3D")]
+        {
+            let system_set = SystemSet::new()
+                .with_system(
+                    systems::sticks::update_3d_sticks
+                        .system()
+                        .label("3d_sticks"),
+                )
+                .with_system(
+                    systems::points::update_3d_points
+                        .system()
+                        .label("3d_points")
+                        .after("3d_sticks"),
+                );
+            let system_set = if let Some(step) = self.time_step {
+                system_set.with_run_criteria(FixedTimestep::step(step))
+            } else {
+                system_set
+            };
+            app.add_system_set(system_set);
+        }
         #[cfg(feature = "debug")]
         {
             app.add_plugin(DebugLinesPlugin);
@@ -44,6 +66,12 @@ impl Plugin for BevyVerletPlugin {
                 systems::sticks::debug_draw_2d_sticks
                     .system()
                     .after("2d_points"),
+            );
+            #[cfg(feature = "2D")]
+            app.add_system(
+                systems::sticks::debug_draw_3d_sticks
+                    .system()
+                    .after("3d_points"),
             );
         }
     }

@@ -4,7 +4,6 @@ use bevy::math::{Vec2, Vec3};
 pub struct VerletConfig {
     pub gravity: Vec3,
     pub friction: f32,
-    pub max_velocity: f32,
 }
 
 impl Default for VerletConfig {
@@ -12,7 +11,6 @@ impl Default for VerletConfig {
         Self {
             gravity: Vec3::new(0., -9.81, 0.),
             friction: 0.01,
-            max_velocity: 10.,
         }
     }
 }

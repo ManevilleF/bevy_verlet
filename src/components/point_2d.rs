@@ -1,12 +1,12 @@
 use bevy::math::{Vec2, Vec3};
 
 #[derive(Debug, Clone)]
-pub struct VerletPoint2 {
+pub struct VerletPoint2D {
     pub(crate) current_position: Vec2,
     pub(crate) old_position: Vec2,
 }
 
-impl VerletPoint2 {
+impl VerletPoint2D {
     pub fn new(position: Vec2) -> Self {
         Self {
             current_position: position,
@@ -27,7 +27,7 @@ impl VerletPoint2 {
     }
 }
 
-impl Default for VerletPoint2 {
+impl Default for VerletPoint2D {
     fn default() -> Self {
         Self {
             current_position: Default::default(),
