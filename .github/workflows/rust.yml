@@ -14,19 +14,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Build
+      - name: build
         run: cargo build --verbose
 
-  build_2D:
+  fmt:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Build
-        run: cargo build --verbose --no-default-features --features 2D
+      - name: Check Formatting
+        run: cargo fmt --all -- --check
 
-  build_3D:
+  clippy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Build
-        run: cargo build --verbose --no-default-features --features 3D
+      - name: Cargo clippy installation
+        run: rustup component add clippy
+      - name: Cargo clippy check
+        run: cargo clippy --all-targets -- -D warnings
