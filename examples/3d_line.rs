@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy_verlet::{BevyVerletPlugin, VerletLocked, VerletPointPbrBundle, VerletStick};
+use bevy_verlet::{BevyVerletPlugin, VerletLocked, VerletPoint, VerletStick};
 
 fn main() {
     App::build()
@@ -35,12 +35,13 @@ fn setup_free_line(
     let points_count = 10;
     let mut previous_entity = None;
     for i in 0..=points_count {
-        let mut cmd = commands.spawn_bundle(verlet_bundle(
+        let mut cmd = commands.spawn_bundle(pbr_bundle(
             material.clone(),
             mesh.clone(),
             Vec3::new(i as f32, 20., 0.),
         ));
-        cmd.insert(Name::new(format!("Point {}", i)));
+        cmd.insert(VerletPoint::default())
+            .insert(Name::new(format!("Point {}", i)));
         if previous_entity.is_none() {
             cmd.insert(VerletLocked {}).insert(fixed_material.clone());
         }
@@ -72,12 +73,13 @@ fn setup_fixed_line(
     let start_pos = -10.;
     let mut previous_entity = None;
     for i in 0..=points_count {
-        let mut cmd = commands.spawn_bundle(verlet_bundle(
+        let mut cmd = commands.spawn_bundle(pbr_bundle(
             material.clone(),
             mesh.clone(),
             Vec3::new(start_pos + i as f32, 0., 0.),
         ));
-        cmd.insert(Name::new(format!("Point {}", i)));
+        cmd.insert(VerletPoint::default())
+            .insert(Name::new(format!("Point {}", i)));
         if previous_entity.is_none() || i == points_count {
             cmd.insert(VerletLocked {}).insert(fixed_material.clone());
         }
@@ -96,18 +98,11 @@ fn setup_fixed_line(
     }
 }
 
-fn verlet_bundle(
-    material: Handle<StandardMaterial>,
-    mesh: Handle<Mesh>,
-    pos: Vec3,
-) -> VerletPointPbrBundle {
-    VerletPointPbrBundle {
-        pbr_bundle: PbrBundle {
-            mesh,
-            material,
-            transform: Transform::from_translation(pos),
-            ..Default::default()
-        },
+fn pbr_bundle(material: Handle<StandardMaterial>, mesh: Handle<Mesh>, pos: Vec3) -> PbrBundle {
+    PbrBundle {
+        mesh,
+        material,
+        transform: Transform::from_translation(pos),
         ..Default::default()
     }
 }

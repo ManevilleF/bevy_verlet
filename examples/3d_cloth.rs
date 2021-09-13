@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy_verlet::{BevyVerletPlugin, VerletLocked, VerletPointPbrBundle, VerletStick};
+use bevy_verlet::{BevyVerletPlugin, VerletLocked, VerletPoint, VerletStick};
 
 fn main() {
     App::build()
@@ -32,20 +32,18 @@ fn setup(
     let mut entities = Vec::new();
     for j in 0..points_y_count {
         for i in 0..points_x_count {
-            let mut cmd = commands.spawn_bundle(VerletPointPbrBundle {
-                pbr_bundle: PbrBundle {
-                    mesh: mesh.clone(),
-                    material: material.clone(),
-                    transform: Transform::from_xyz(
-                        origin_x + (2.0 * i as f32),
-                        origin_y + (2.0 * (j + i / 2) as f32),
-                        0.,
-                    ),
-                    ..Default::default()
-                },
+            let mut cmd = commands.spawn_bundle(PbrBundle {
+                mesh: mesh.clone(),
+                material: material.clone(),
+                transform: Transform::from_xyz(
+                    origin_x + (2.0 * i as f32),
+                    origin_y + (2.0 * (j + i / 2) as f32),
+                    0.,
+                ),
                 ..Default::default()
             });
-            cmd.insert(Name::new(format!("Point {}", i)));
+            cmd.insert(VerletPoint::default())
+                .insert(Name::new(format!("Point {}", i)));
             if j == 0 {
                 cmd.insert(VerletLocked {}).insert(fixed_material.clone());
             }

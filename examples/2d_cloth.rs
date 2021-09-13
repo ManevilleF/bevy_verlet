@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy_verlet::{BevyVerletPlugin, VerletLocked, VerletPointSpriteBundle, VerletStick};
+use bevy_verlet::{BevyVerletPlugin, VerletLocked, VerletPoint, VerletStick};
 
 fn main() {
     App::build()
@@ -24,20 +24,18 @@ fn setup(mut commands: Commands, mut materials: ResMut<Assets<ColorMaterial>>) {
     let mut entities = Vec::new();
     for j in 0..points_y_count {
         for i in 0..points_x_count {
-            let mut cmd = commands.spawn_bundle(VerletPointSpriteBundle {
-                sprite_bundle: SpriteBundle {
-                    sprite: Sprite::new(Vec2::splat(10.)),
-                    material: material.clone(),
-                    transform: Transform::from_xyz(
-                        origin_x + (30. * i as f32),
-                        origin_y + (-30. * (j + i / 2) as f32),
-                        0.,
-                    ),
-                    ..Default::default()
-                },
+            let mut cmd = commands.spawn_bundle(SpriteBundle {
+                sprite: Sprite::new(Vec2::splat(10.)),
+                material: material.clone(),
+                transform: Transform::from_xyz(
+                    origin_x + (30. * i as f32),
+                    origin_y + (-30. * (j + i / 2) as f32),
+                    0.,
+                ),
                 ..Default::default()
             });
-            cmd.insert(Name::new(format!("Point {}", i)));
+            cmd.insert(VerletPoint::default())
+                .insert(Name::new(format!("Point {}", i)));
             if j == 0 {
                 cmd.insert(VerletLocked {}).insert(fixed_material.clone());
             }

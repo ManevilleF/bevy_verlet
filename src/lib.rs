@@ -1,6 +1,5 @@
-pub use {bundles::*, components::*, resources::*};
+pub use {components::*, resources::*};
 
-mod bundles;
 mod components;
 mod resources;
 mod systems;

@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy_verlet::{BevyVerletPlugin, VerletLocked, VerletPointSpriteBundle, VerletStick};
+use bevy_verlet::{BevyVerletPlugin, VerletLocked, VerletPoint, VerletStick};
 
 fn main() {
     App::build()
@@ -27,11 +27,12 @@ fn setup_free_line(mut commands: Commands, mut materials: ResMut<Assets<ColorMat
     let points_count = 10;
     let mut previous_entity = None;
     for i in 0..=points_count {
-        let mut cmd = commands.spawn_bundle(verlet_bundle(
+        let mut cmd = commands.spawn_bundle(sprite_bundle(
             material.clone(),
             Vec2::new(50. * i as f32, 300.),
         ));
-        cmd.insert(Name::new(format!("Point {}", i)));
+        cmd.insert(VerletPoint::default())
+            .insert(Name::new(format!("Point {}", i)));
         if previous_entity.is_none() {
             cmd.insert(VerletLocked {}).insert(fixed_material.clone());
         }
@@ -58,11 +59,12 @@ fn setup_fixed_line(mut commands: Commands, mut materials: ResMut<Assets<ColorMa
     let start_pos = -450.;
     let mut previous_entity = None;
     for i in 0..=points_count {
-        let mut cmd = commands.spawn_bundle(verlet_bundle(
+        let mut cmd = commands.spawn_bundle(sprite_bundle(
             material.clone(),
             Vec2::new(start_pos + 30. * i as f32, 0.),
         ));
-        cmd.insert(Name::new(format!("Point {}", i)));
+        cmd.insert(VerletPoint::default())
+            .insert(Name::new(format!("Point {}", i)));
         if previous_entity.is_none() || i == points_count {
             cmd.insert(VerletLocked {}).insert(fixed_material.clone());
         }
@@ -81,14 +83,11 @@ fn setup_fixed_line(mut commands: Commands, mut materials: ResMut<Assets<ColorMa
     }
 }
 
-fn verlet_bundle(material: Handle<ColorMaterial>, pos: Vec2) -> VerletPointSpriteBundle {
-    VerletPointSpriteBundle {
-        sprite_bundle: SpriteBundle {
-            sprite: Sprite::new(Vec2::splat(10.)),
-            material,
-            transform: Transform::from_xyz(pos.x, pos.y, 0.),
-            ..Default::default()
-        },
+fn sprite_bundle(material: Handle<ColorMaterial>, pos: Vec2) -> SpriteBundle {
+    SpriteBundle {
+        sprite: Sprite::new(Vec2::splat(10.)),
+        material,
+        transform: Transform::from_xyz(pos.x, pos.y, 0.),
         ..Default::default()
     }
 }
