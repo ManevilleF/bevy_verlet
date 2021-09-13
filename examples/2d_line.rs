@@ -1,7 +1,5 @@
 use bevy::prelude::*;
-use bevy_verlet::{
-    BevyVerletPlugin, VerletLocked, VerletPoint2D, VerletPointSpriteBundle, VerletStick,
-};
+use bevy_verlet::{BevyVerletPlugin, VerletLocked, VerletPointSpriteBundle, VerletStick};
 
 fn main() {
     App::build()
@@ -85,10 +83,10 @@ fn setup_fixed_line(mut commands: Commands, mut materials: ResMut<Assets<ColorMa
 
 fn verlet_bundle(material: Handle<ColorMaterial>, pos: Vec2) -> VerletPointSpriteBundle {
     VerletPointSpriteBundle {
-        verlet_point: VerletPoint2D::new(pos),
         sprite_bundle: SpriteBundle {
             sprite: Sprite::new(Vec2::splat(10.)),
             material,
+            transform: Transform::from_xyz(pos.x, pos.y, 0.),
             ..Default::default()
         },
         ..Default::default()

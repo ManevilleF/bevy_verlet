@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 use bevy_verlet::{
-    BevyVerletPlugin, VerletLocked, VerletPoint2D, VerletPointSpriteBundle, VerletStick,
+    BevyVerletPlugin, VerletLocked, VerletPoint, VerletPointSpriteBundle, VerletStick,
 };
 
 fn main() {
@@ -20,20 +20,20 @@ fn setup(mut commands: Commands, mut materials: ResMut<Assets<ColorMaterial>>) {
     commands.spawn_bundle(OrthographicCameraBundle::new_2d());
     let material = materials.add(Color::WHITE.into());
     let fixed_material = materials.add(Color::RED.into());
-    let stick_length: f32 = 30.;
+    let stick_length: f32 = 35.;
     let (origin_x, origin_y) = (-450., 350.);
     let (points_x_count, points_y_count) = (20, 15);
     let mut entities = Vec::new();
     for j in 0..points_y_count {
         for i in 0..points_x_count {
             let mut cmd = commands.spawn_bundle(VerletPointSpriteBundle {
-                verlet_point: VerletPoint2D::new(Vec2::new(
-                    origin_x + (30. * i as f32),
-                    origin_y + (-30. * j as f32),
-                )),
                 sprite_bundle: SpriteBundle {
                     sprite: Sprite::new(Vec2::splat(10.)),
                     material: material.clone(),
+                    transform: Transform::from_xyz(
+                        origin_x + (30. * i as f32),
+                        origin_y + (-30. * (j + i / 2) as f32),
+                    0.),
                     ..Default::default()
                 },
                 ..Default::default()

@@ -1,7 +1,5 @@
 use bevy::prelude::*;
-use bevy_verlet::{
-    BevyVerletPlugin, VerletLocked, VerletPoint3D, VerletPointPbrBundle, VerletStick,
-};
+use bevy_verlet::{BevyVerletPlugin, VerletLocked, VerletPointPbrBundle, VerletStick};
 
 fn main() {
     App::build()
@@ -30,19 +28,19 @@ fn setup(
     let mesh = meshes.add(Mesh::from(shape::Cube::new(1.)));
     let stick_length: f32 = 2.;
     let (origin_x, origin_y) = (-5., 10.);
-    let (points_x_count, points_y_count) = (30, 5);
+    let (points_x_count, points_y_count) = (20, 15);
     let mut entities = Vec::new();
     for j in 0..points_y_count {
         for i in 0..points_x_count {
             let mut cmd = commands.spawn_bundle(VerletPointPbrBundle {
-                verlet_point: VerletPoint3D::new(Vec3::new(
-                    origin_x + (2.0 * i as f32),
-                    origin_y + (2.0 * j as f32),
-                    0.,
-                )),
                 pbr_bundle: PbrBundle {
                     mesh: mesh.clone(),
                     material: material.clone(),
+                    transform: Transform::from_xyz(
+                        origin_x + (2.0 * i as f32),
+                        origin_y + (2.0 * (j + i / 2) as f32),
+                        0.,
+                    ),
                     ..Default::default()
                 },
                 ..Default::default()

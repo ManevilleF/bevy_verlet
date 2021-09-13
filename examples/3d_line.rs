@@ -1,7 +1,5 @@
 use bevy::prelude::*;
-use bevy_verlet::{
-    BevyVerletPlugin, VerletLocked, VerletPoint3D, VerletPointPbrBundle, VerletStick,
-};
+use bevy_verlet::{BevyVerletPlugin, VerletLocked, VerletPointPbrBundle, VerletStick};
 
 fn main() {
     App::build()
@@ -104,10 +102,10 @@ fn verlet_bundle(
     pos: Vec3,
 ) -> VerletPointPbrBundle {
     VerletPointPbrBundle {
-        verlet_point: VerletPoint3D::new(pos),
         pbr_bundle: PbrBundle {
             mesh,
             material,
+            transform: Transform::from_translation(pos),
             ..Default::default()
         },
         ..Default::default()

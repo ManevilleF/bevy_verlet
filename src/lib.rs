@@ -16,63 +16,24 @@ pub struct BevyVerletPlugin {
 
 impl Plugin for BevyVerletPlugin {
     fn build(&self, app: &mut AppBuilder) {
-        #[cfg(feature = "2D")]
-        {
-            let system_set = SystemSet::new()
-                .with_system(
-                    systems::sticks::update_2d_sticks
-                        .system()
-                        .label("2d_sticks"),
-                )
-                .with_system(
-                    systems::points::update_2d_points
-                        .system()
-                        .label("2d_points")
-                        .after("2d_sticks"),
-                );
-            let system_set = if let Some(step) = self.time_step {
-                system_set.with_run_criteria(FixedTimestep::step(step))
-            } else {
-                system_set
-            };
-            app.add_system_set(system_set);
-        }
-        #[cfg(feature = "3D")]
-        {
-            let system_set = SystemSet::new()
-                .with_system(
-                    systems::sticks::update_3d_sticks
-                        .system()
-                        .label("3d_sticks"),
-                )
-                .with_system(
-                    systems::points::update_3d_points
-                        .system()
-                        .label("3d_points")
-                        .after("3d_sticks"),
-                );
-            let system_set = if let Some(step) = self.time_step {
-                system_set.with_run_criteria(FixedTimestep::step(step))
-            } else {
-                system_set
-            };
-            app.add_system_set(system_set);
-        }
+        let system_set = SystemSet::new()
+            .with_system(systems::points::update_points.system().label("points"))
+            .with_system(
+                systems::sticks::update_sticks
+                    .system()
+                    .label("sticks")
+                    .after("points"),
+            );
+        let system_set = if let Some(step) = self.time_step {
+            system_set.with_run_criteria(FixedTimestep::step(step))
+        } else {
+            system_set
+        };
+        app.add_system_set(system_set);
         #[cfg(feature = "debug")]
         {
             app.add_plugin(DebugLinesPlugin);
-            #[cfg(feature = "2D")]
-            app.add_system(
-                systems::sticks::debug_draw_2d_sticks
-                    .system()
-                    .after("2d_points"),
-            );
-            #[cfg(feature = "3D")]
-            app.add_system(
-                systems::sticks::debug_draw_3d_sticks
-                    .system()
-                    .after("3d_points"),
-            );
+            app.add_system(systems::sticks::debug_draw_sticks.system().after("points"));
         }
     }
 }
