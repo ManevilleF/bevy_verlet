@@ -28,5 +28,5 @@ optional = true
 
 [dev-dependencies.bevy]
 version = "0.5"
-features = ["render", "bevy_winit", "png", "bevy_wgpu"]
+features = ["render", "bevy_winit", "png", "x11", "bevy_wgpu"]
 default-features = false
