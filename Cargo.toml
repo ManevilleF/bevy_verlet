@@ -8,10 +8,21 @@ edition = "2018"
 [features]
 default = []
 debug = ["bevy_prototype_debug_lines"]
+shuffle = ["rand"]
 
 [dependencies]
-bevy = { version = "0.5", default-features = false  }
-bevy_prototype_debug_lines = { version = "0.3", optional = true }
+
+[dependencies.bevy]
+version = "0.5"
+default-features = false
+
+[dependencies.bevy_prototype_debug_lines]
+version = "0.3"
+optional = true
+
+[dependencies.rand]
+version = "0.8.4"
+optional = true
 
 [dev-dependencies]
 bevy = "0.5"

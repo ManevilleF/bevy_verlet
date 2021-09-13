@@ -17,6 +17,16 @@ Customize *friction* and *gravity* with the `VerletConfig` resource.
 
 > Works in 2D and 3D.
 
+## Cargo features
+
+1. `debug`
+
+    This feature will add a *system* drawing debug lines for every stick using [bevy_prototype_debug_lines](https://crates.io/crates/bevy_prototype_debug_lines)
+
+2. `shuffle`
+
+    This feature will randomize the `VerletStick` computation, can be costly and make the processing jittery.
+
 ## Examples
 
 ### 2D

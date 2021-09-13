@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy_verlet::{BevyVerletPlugin, VerletLocked, VerletPoint, VerletStick};
+use bevy_verlet::{BevyVerletPlugin, VerletConfig, VerletLocked, VerletPoint, VerletStick};
 
 fn main() {
     App::build()
@@ -13,6 +13,10 @@ fn main() {
         .add_startup_system(setup_camera.system())
         .add_startup_system(setup_free_line.system())
         .add_startup_system(setup_fixed_line.system())
+        .insert_resource(VerletConfig {
+            sticks_computation_depth: 5,
+            ..Default::default()
+        })
         .run();
 }
 
@@ -31,14 +35,14 @@ fn setup_free_line(
     let material = materials.add(Color::WHITE.into());
     let fixed_material = materials.add(Color::RED.into());
     let mesh = meshes.add(Mesh::from(shape::Cube::new(1.)));
-    let stick_length: f32 = 1.;
+    let stick_length: f32 = 2.;
     let points_count = 10;
     let mut previous_entity = None;
     for i in 0..=points_count {
         let mut cmd = commands.spawn_bundle(pbr_bundle(
             material.clone(),
             mesh.clone(),
-            Vec3::new(i as f32, 20., 0.),
+            Vec3::new((i * 2) as f32, 20., 0.),
         ));
         cmd.insert(VerletPoint::default())
             .insert(Name::new(format!("Point {}", i)));
@@ -68,7 +72,7 @@ fn setup_fixed_line(
     let material = materials.add(Color::WHITE.into());
     let fixed_material = materials.add(Color::RED.into());
     let mesh = meshes.add(Mesh::from(shape::Cube::new(1.)));
-    let stick_length: f32 = 1.;
+    let stick_length: f32 = 2.;
     let points_count = 20;
     let start_pos = -10.;
     let mut previous_entity = None;
@@ -76,7 +80,7 @@ fn setup_fixed_line(
         let mut cmd = commands.spawn_bundle(pbr_bundle(
             material.clone(),
             mesh.clone(),
-            Vec3::new(start_pos + i as f32, 0., 0.),
+            Vec3::new(start_pos + (i * 2) as f32, 0., 0.),
         ));
         cmd.insert(VerletPoint::default())
             .insert(Name::new(format!("Point {}", i)));

@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy_verlet::{BevyVerletPlugin, VerletLocked, VerletPoint, VerletStick};
+use bevy_verlet::{BevyVerletPlugin, VerletConfig, VerletLocked, VerletPoint, VerletStick};
 
 fn main() {
     App::build()
@@ -11,6 +11,10 @@ fn main() {
             ..Default::default()
         })
         .add_startup_system(setup.system())
+        .insert_resource(VerletConfig {
+            sticks_computation_depth: 5,
+            ..Default::default()
+        })
         .run();
 }
 

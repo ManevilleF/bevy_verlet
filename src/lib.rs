@@ -9,7 +9,9 @@ use bevy::prelude::*;
 #[cfg(feature = "debug")]
 use bevy_prototype_debug_lines::DebugLinesPlugin;
 
+/// Plugin for Verlet physics
 pub struct BevyVerletPlugin {
+    /// Custom time step for verlet physics, if set to `None` physics will run every frame
     pub time_step: Option<f64>,
 }
 
