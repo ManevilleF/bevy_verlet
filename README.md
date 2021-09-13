@@ -1,9 +1,12 @@
 # bevy_verlet
 
+[![workflow](https://github.com/ManevilleF/bevy_verlet/actions/workflows/rust.yml/badge.svg)](https://github.com/ManevilleF/bevy_verlet/actions/workflows/rust.yml)
+
 Simple Verlet points and sticks implementation for bevy.
 
 <img src="./docs/demo_line.gif" alt="demo gif" width="400"/>
 <img src="./docs/demo_cloth.gif" alt="demo gif" width="400"/>
+<img src="./docs/demo_cloth_cutting.gif" alt="demo gif" width="400"/>
 
 ## Features
 
@@ -33,6 +36,7 @@ Customize *friction* and *gravity* with the `VerletConfig` resource.
 
 * `cargo run --example 2d_line --features "debug"`
 * `cargo run --example 2d_cloth --features "debug"`
+* `cargo run --example 2d_cloth_cutter --features "debug"`
 
 ### 3D
 
