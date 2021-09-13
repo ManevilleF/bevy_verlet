@@ -12,7 +12,11 @@ pub fn update_points(
     let down_force = config.gravity * delta_time;
     for (mut transform, mut point) in points_query.iter_mut() {
         let position = transform.translation;
-        let velocity = if let Some(pos) = point.old_position { position - pos } else { Vec3::ZERO };
+        let velocity = if let Some(pos) = point.old_position {
+            position - pos
+        } else {
+            Vec3::ZERO
+        };
         transform.translation += velocity * config.friction_coefficient() + down_force;
         point.old_position = Some(position);
     }

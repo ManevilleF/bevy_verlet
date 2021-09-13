@@ -4,6 +4,7 @@ use bevy::prelude::*;
 #[cfg(feature = "debug")]
 use bevy_prototype_debug_lines::DebugLines;
 
+#[allow(clippy::type_complexity)]
 pub fn update_sticks(
     sticks_query: Query<&VerletStick>,
     mut query: QuerySet<(

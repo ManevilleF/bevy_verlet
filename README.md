@@ -1,11 +1,21 @@
 # bevy_verlet
 
-Verlet points and sticks implementation for bevy.
+Simple Verlet points and sticks implementation for bevy.
+
+<img src="./docs/demo_line.gif" alt="demo gif" width="400"/>
+<img src="./docs/demo_cloth.gif" alt="demo gif" width="400"/>
+
+## Features
 
 You can simply add a `VerletPoint` component on any entity with a `Transform` and the verlet physics will apply.
+
 Connect points using `VerletStick` to constrain movement (see [examples](./examples)).
 
-Works in 2D and 3D.
+Lock some points by adding the `VerletLocked` component on a `VerletPoint` entity.
+
+Customize *friction* and *gravity* with the `VerletConfig` resource.
+
+> Works in 2D and 3D.
 
 ## Examples
 

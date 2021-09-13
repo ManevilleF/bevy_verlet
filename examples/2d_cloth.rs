@@ -1,7 +1,5 @@
 use bevy::prelude::*;
-use bevy_verlet::{
-    BevyVerletPlugin, VerletLocked, VerletPoint, VerletPointSpriteBundle, VerletStick,
-};
+use bevy_verlet::{BevyVerletPlugin, VerletLocked, VerletPointSpriteBundle, VerletStick};
 
 fn main() {
     App::build()
@@ -33,7 +31,8 @@ fn setup(mut commands: Commands, mut materials: ResMut<Assets<ColorMaterial>>) {
                     transform: Transform::from_xyz(
                         origin_x + (30. * i as f32),
                         origin_y + (-30. * (j + i / 2) as f32),
-                    0.),
+                        0.,
+                    ),
                     ..Default::default()
                 },
                 ..Default::default()

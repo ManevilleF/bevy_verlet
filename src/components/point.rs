@@ -7,8 +7,6 @@ pub struct VerletPoint {
 
 impl Default for VerletPoint {
     fn default() -> Self {
-        Self {
-            old_position: None,
-        }
+        Self { old_position: None }
     }
 }
