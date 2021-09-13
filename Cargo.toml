@@ -25,4 +25,8 @@ version = "0.8.4"
 optional = true
 
 [dev-dependencies]
-bevy = "0.5"
+
+[dev-dependencies.bevy]
+version = "0.5"
+features = ["render", "bevy_winit", "png", "bevy_wgpu"]
+default-features = false
