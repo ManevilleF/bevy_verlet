@@ -4,10 +4,6 @@
 
 Simple Verlet points and sticks implementation for bevy.
 
-<img src="./docs/demo_line.gif" alt="demo gif" width="400"/>
-<img src="./docs/demo_cloth.gif" alt="demo gif" width="400"/>
-<img src="./docs/demo_cloth_cutting.gif" alt="demo gif" width="400"/>
-
 ## Features
 
 You can simply add a `VerletPoint` component on any entity with a `Transform` and the verlet physics will apply.
@@ -34,9 +30,27 @@ Customize *friction* and *gravity* with the `VerletConfig` resource.
 
 ### 2D
 
-* `cargo run --example 2d_line --features "debug"`
-* `cargo run --example 2d_cloth --features "debug"`
-* `cargo run --example 2d_cloth_cutter --features "debug"`
+1. 2D Line
+
+   `cargo run --example 2d_line --features "debug"`
+
+   ![Alt](./docs/demo_line.gif "demo gif")
+
+3. 2D cloth
+
+   `cargo run --example 2d_cloth --features "debug"`
+
+   ![Alt](./docs/demo_cloth.gif "demo gif")
+
+4. 2D cloth cutting
+
+   `cargo run --example 2d_cloth_cutter --features "debug"`
+
+   *Cutting cloth without max tension*
+   ![Alt](./docs/demo_cloth_cutting.gif "demo gif")
+
+   *Sticks breaking on max tension*
+   ![Alt](./docs/demo_cloth_ripping.gif "demo gif")
 
 ### 3D
 

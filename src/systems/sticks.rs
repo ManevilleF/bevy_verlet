@@ -1,5 +1,5 @@
 use crate::components::{VerletLocked, VerletPoint, VerletStick};
-use crate::VerletConfig;
+use crate::{VerletConfig, VerletStickMaxTension};
 use bevy::log;
 use bevy::prelude::*;
 #[cfg(feature = "debug")]
@@ -11,7 +11,7 @@ use rand::{prelude::SliceRandom, thread_rng};
 pub fn update_sticks(
     config: Option<Res<VerletConfig>>,
     sticks_query: Query<&VerletStick>,
-    mut query: QuerySet<(
+    mut points_query: QuerySet<(
         Query<(&Transform, Option<&VerletLocked>), With<VerletPoint>>,
         Query<&mut Transform, With<VerletPoint>>,
     )>,
@@ -25,14 +25,14 @@ pub fn update_sticks(
         #[cfg(feature = "shuffle")]
         iterator.shuffle(&mut thread_rng());
         for stick in iterator.iter() {
-            let (point_a, point_a_locked) = match query.q0().get(stick.point_a_entity) {
+            let (point_a, point_a_locked) = match points_query.q0().get(stick.point_a_entity) {
                 Ok(p) => p,
                 Err(e) => {
                     log::error!("Could not find point_a entity for stick: {}", e);
                     continue;
                 }
             };
-            let (point_b, point_b_locked) = match query.q0().get(stick.point_b_entity) {
+            let (point_b, point_b_locked) = match points_query.q0().get(stick.point_b_entity) {
                 Ok(p) => p,
                 Err(e) => {
                     log::error!("Could not find point_b entity for stick: {}", e);
@@ -47,13 +47,42 @@ pub fn update_sticks(
             let center: Vec3 = (point_a.translation + point_b.translation) / 2.;
             let direction: Vec3 = (point_a.translation - point_b.translation).normalize();
             if !point_a_locked {
-                let mut point_a_transform = query.q1_mut().get_mut(stick.point_a_entity).unwrap();
+                let mut point_a_transform =
+                    points_query.q1_mut().get_mut(stick.point_a_entity).unwrap();
                 point_a_transform.translation = center + direction * stick.length / 2.;
             }
             if !point_b_locked {
-                let mut point_b_transform = query.q1_mut().get_mut(stick.point_b_entity).unwrap();
+                let mut point_b_transform =
+                    points_query.q1_mut().get_mut(stick.point_b_entity).unwrap();
                 point_b_transform.translation = center - direction * stick.length / 2.;
             }
+        }
+    }
+}
+
+pub fn handle_stick_constraints(
+    mut commands: Commands,
+    sticks_query: Query<(Entity, &VerletStick, &VerletStickMaxTension)>,
+    points_query: Query<&Transform, With<VerletPoint>>,
+) {
+    for (entity, stick, max_tension) in sticks_query.iter() {
+        let point_a = match points_query.get(stick.point_a_entity) {
+            Ok(p) => p,
+            Err(e) => {
+                log::error!("Could not find point_a entity for stick: {}", e);
+                continue;
+            }
+        };
+        let point_b = match points_query.get(stick.point_b_entity) {
+            Ok(p) => p,
+            Err(e) => {
+                log::error!("Could not find point_b entity for stick: {}", e);
+                continue;
+            }
+        };
+        let distance = point_a.translation.distance(point_b.translation);
+        if distance > stick.length * max_tension.0 {
+            commands.entity(entity).despawn_recursive();
         }
     }
 }
