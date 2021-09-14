@@ -1,9 +1,11 @@
-pub use {components::*, resources::*};
+pub use {collider::*, components::*, resources::*};
 
+mod collider;
 mod components;
 mod resources;
 mod systems;
 
+use crate::verlet_time_step::VerletTimeStep;
 use bevy::core::FixedTimestep;
 use bevy::prelude::*;
 #[cfg(feature = "debug")]
@@ -22,8 +24,10 @@ impl Plugin for BevyVerletPlugin {
             .with_system(systems::sticks::update_sticks.system())
             .with_system(systems::sticks::handle_stick_constraints.system());
         let system_set = if let Some(step) = self.time_step {
+            app.insert_resource(VerletTimeStep::FixedDeltaTime(step));
             system_set.with_run_criteria(FixedTimestep::step(step))
         } else {
+            app.insert_resource(VerletTimeStep::DeltaTime);
             system_set
         };
         app.add_system_set(system_set);
