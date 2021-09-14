@@ -1,5 +1,7 @@
 use bevy::prelude::*;
-use bevy_verlet::{BevyVerletPlugin, VerletLocked, VerletPoint, VerletStick};
+use bevy_verlet::{
+    BevyVerletPlugin, VerletLocked, VerletPoint, VerletStick, VerletStickConstraint,
+};
 
 fn main() {
     App::build()
@@ -64,11 +66,16 @@ fn spawn_stick(
 ) {
     if let Some(i) = coord {
         let other_entity = entities.get(i).unwrap();
-        commands.spawn().insert(VerletStick {
-            point_a_entity: entity,
-            point_b_entity: *other_entity,
-            length,
-        });
+        commands
+            .spawn()
+            .insert(VerletStick {
+                point_a_entity: entity,
+                point_b_entity: *other_entity,
+                length,
+            })
+            .insert(VerletStickConstraint {
+                solidity_factor: 2.,
+            });
     }
 }
 
@@ -103,7 +110,7 @@ fn cut_sticks(
         let distance_a = p.distance(a);
         let distance_b = p.distance(b);
         if distance_a > 0. && distance_a <= l && distance_b > 0. && distance_b <= l {
-            commands.entity(entity).despawn();
+            commands.entity(entity).despawn_recursive();
         }
     }
 }

@@ -19,12 +19,8 @@ impl Plugin for BevyVerletPlugin {
     fn build(&self, app: &mut AppBuilder) {
         let system_set = SystemSet::new()
             .with_system(systems::points::update_points.system().label("points"))
-            .with_system(
-                systems::sticks::update_sticks
-                    .system()
-                    .label("sticks")
-                    .after("points"),
-            );
+            .with_system(systems::sticks::update_sticks.system())
+            .with_system(systems::sticks::handle_stick_constraints.system());
         let system_set = if let Some(step) = self.time_step {
             system_set.with_run_criteria(FixedTimestep::step(step))
         } else {
