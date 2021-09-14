@@ -1,5 +1,5 @@
 use crate::components::{VerletLocked, VerletPoint, VerletStick};
-use crate::{VerletConfig, VerletStickConstraint};
+use crate::{VerletConfig, VerletStickMaxTension};
 use bevy::log;
 use bevy::prelude::*;
 #[cfg(feature = "debug")]
@@ -62,10 +62,10 @@ pub fn update_sticks(
 
 pub fn handle_stick_constraints(
     mut commands: Commands,
-    sticks_query: Query<(Entity, &VerletStick, &VerletStickConstraint)>,
+    sticks_query: Query<(Entity, &VerletStick, &VerletStickMaxTension)>,
     points_query: Query<&Transform, With<VerletPoint>>,
 ) {
-    for (entity, stick, constraint) in sticks_query.iter() {
+    for (entity, stick, max_tension) in sticks_query.iter() {
         let point_a = match points_query.get(stick.point_a_entity) {
             Ok(p) => p,
             Err(e) => {
@@ -81,7 +81,7 @@ pub fn handle_stick_constraints(
             }
         };
         let distance = point_a.translation.distance(point_b.translation);
-        if distance > stick.length * constraint.solidity_factor {
+        if distance > stick.length * max_tension.0 {
             commands.entity(entity).despawn_recursive();
         }
     }

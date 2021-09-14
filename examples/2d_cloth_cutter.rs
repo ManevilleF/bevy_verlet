@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 use bevy_verlet::{
-    BevyVerletPlugin, VerletLocked, VerletPoint, VerletStick, VerletStickConstraint,
+    BevyVerletPlugin, VerletLocked, VerletPoint, VerletStick, VerletStickMaxTension,
 };
 
 fn main() {
@@ -73,9 +73,7 @@ fn spawn_stick(
                 point_b_entity: *other_entity,
                 length,
             })
-            .insert(VerletStickConstraint {
-                solidity_factor: 2.,
-            });
+            .insert(VerletStickMaxTension(2.));
     }
 }
 
