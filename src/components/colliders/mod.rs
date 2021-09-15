@@ -1,9 +1,13 @@
 use bevy::math::{Vec2, Vec3};
 
-mod capsule_collider;
-mod circle_collider;
-mod sphere_collider;
-mod stadium_collider;
+#[cfg(feature = "2d_collisions")]
+pub use two_dimensional::*;
+#[cfg(feature = "2d_collisions")]
+mod two_dimensional;
+#[cfg(feature = "3d_collisions")]
+pub use three_dimensional::*;
+#[cfg(feature = "3d_collisions")]
+mod three_dimensional;
 
 mod lines {
     use super::*;

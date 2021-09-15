@@ -6,9 +6,11 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [features]
-default = []
+default = ["3d_collisions", "2d_collisions"]
 debug = ["bevy_prototype_debug_lines"]
 shuffle = ["rand"]
+3d_collisions = []
+2d_collisions = []
 
 [dependencies]
 
@@ -25,6 +27,7 @@ version = "0.8.4"
 optional = true
 
 [dev-dependencies]
+bevy_prototype_lyon = "0.3"
 
 [dev-dependencies.bevy]
 version = "0.5"

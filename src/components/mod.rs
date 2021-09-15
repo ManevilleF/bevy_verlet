@@ -1,5 +1,6 @@
-pub use {locked::*, point::*, stick::*, stick_max_tension::*};
+pub use {bounciness::*, locked::*, point::*, stick::*, stick_max_tension::*};
 
+mod bounciness;
 pub mod colliders;
 mod locked;
 mod point;

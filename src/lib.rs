@@ -1,5 +1,10 @@
-pub use {collider::*, components::*, resources::*};
+pub use {components::*, resources::*};
 
+#[cfg(any(feature = "2d_collisions", feature = "3d_collisions"))]
+pub use collider::*;
+#[cfg(any(feature = "2d_collisions", feature = "3d_collisions"))]
+use components::colliders::*;
+#[cfg(any(feature = "2d_collisions", feature = "3d_collisions"))]
 mod collider;
 mod components;
 mod resources;
@@ -20,9 +25,15 @@ pub struct BevyVerletPlugin {
 impl Plugin for BevyVerletPlugin {
     fn build(&self, app: &mut AppBuilder) {
         let system_set = SystemSet::new()
-            .with_system(systems::points::update_points.system().label("points"))
+            .with_system(systems::points::update_points.system())
             .with_system(systems::sticks::update_sticks.system())
             .with_system(systems::sticks::handle_stick_constraints.system());
+        #[cfg(feature = "2d_collisions")]
+        let system_set =
+            system_set.with_system(systems::collisions::handle_collisions::<Collider2d>.system());
+        #[cfg(feature = "3d_collisions")]
+        let system_set =
+            system_set.with_system(systems::collisions::handle_collisions::<Collider3d>.system());
         let system_set = if let Some(step) = self.time_step {
             app.insert_resource(VerletTimeStep::FixedDeltaTime(step));
             system_set.with_run_criteria(FixedTimestep::step(step))
@@ -34,7 +45,7 @@ impl Plugin for BevyVerletPlugin {
         #[cfg(feature = "debug")]
         {
             app.add_plugin(DebugLinesPlugin);
-            app.add_system(systems::sticks::debug_draw_sticks.system().after("points"));
+            app.add_system(systems::sticks::debug_draw_sticks.system());
         }
     }
 }
