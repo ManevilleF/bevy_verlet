@@ -19,11 +19,12 @@ impl Collider for StadiumCollider {
             closest_point_to_segment_2d(point_2d, (pos_2d + self.start, pos_2d + self.end));
         if is_point_in_circle(point_2d, projected_point_2d, self.radius) {
             // TODO: investigate 0 normal cases
-            let normal = point_2d - pos_2d;
+            let normal = point_2d - projected_point_2d;
             let normal = Vec3::new(normal.x, normal.y, 0.).normalize_or_zero();
             Some(Collision {
                 normal,
-                target_point: pos + normal * self.radius,
+                target_point: Vec3::new(projected_point_2d.x, projected_point_2d.y, point.z)
+                    + normal * self.radius,
             })
         } else {
             None

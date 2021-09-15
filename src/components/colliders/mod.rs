@@ -38,3 +38,14 @@ pub fn is_point_in_circle(point: Vec2, center: Vec2, radius: f32) -> bool {
 pub fn is_point_in_sphere(point: Vec3, center: Vec3, radius: f32) -> bool {
     point.distance_squared(center) < radius * radius
 }
+
+pub fn sign_2d(p1: Vec2, p2: Vec2, p3: Vec2) -> f32 {
+    (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y)
+}
+
+pub fn is_point_in_triangle(point: Vec2, (a, b, c): (Vec2, Vec2, Vec2)) -> bool {
+    let b1 = sign_2d(point, a, b) < 0.;
+    let b2 = sign_2d(point, b, c) < 0.;
+    let b3 = sign_2d(point, c, a) < 0.;
+    b1 == b2 && b2 == b3
+}
