@@ -109,7 +109,6 @@ fn setup_colliders(
         radius: 30.0,
         ..Default::default()
     };
-    println!("spawning collider");
     commands
         .spawn_bundle(GeometryBuilder::build_as(
             &shape,
