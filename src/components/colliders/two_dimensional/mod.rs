@@ -1,8 +1,9 @@
 use crate::{Collider, Collision};
 use bevy::prelude::{GlobalTransform, Vec3};
-pub use {circle_collider::*, stadium_collider::*, triangle_collider::*};
+pub use {circle_collider::*, rectangle_collider::*, stadium_collider::*, triangle_collider::*};
 
 mod circle_collider;
+mod rectangle_collider;
 mod stadium_collider;
 mod triangle_collider;
 

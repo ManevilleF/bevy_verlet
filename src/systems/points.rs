@@ -6,7 +6,10 @@ use std::ops::Deref;
 
 pub fn update_points(
     time_step: Res<VerletTimeStep>,
-    mut points_query: Query<(&mut Transform, &mut VerletPoint), Without<VerletLocked>>,
+    mut points_query: Query<
+        (&mut Transform, &GlobalTransform, &mut VerletPoint),
+        Without<VerletLocked>,
+    >,
     time: Res<Time>,
     config: Option<Res<VerletConfig>>,
 ) {
@@ -16,8 +19,8 @@ pub fn update_points(
         VerletTimeStep::FixedDeltaTime(dt) => *dt as f32,
     };
     let down_force = config.gravity * delta_time;
-    for (mut transform, mut point) in points_query.iter_mut() {
-        let position = transform.translation;
+    for (mut transform, g_transform, mut point) in points_query.iter_mut() {
+        let position = g_transform.translation;
         let velocity = if let Some(pos) = point.old_position {
             position - pos
         } else {

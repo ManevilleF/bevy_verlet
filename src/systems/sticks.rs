@@ -12,7 +12,7 @@ pub fn update_sticks(
     config: Option<Res<VerletConfig>>,
     sticks_query: Query<&VerletStick>,
     mut points_query: QuerySet<(
-        Query<(&Transform, Option<&VerletLocked>), With<VerletPoint>>,
+        Query<(&GlobalTransform, Option<&VerletLocked>), With<VerletPoint>>,
         Query<&mut Transform, With<VerletPoint>>,
     )>,
 ) {
@@ -63,7 +63,7 @@ pub fn update_sticks(
 pub fn handle_stick_constraints(
     mut commands: Commands,
     sticks_query: Query<(Entity, &VerletStick, &VerletStickMaxTension)>,
-    points_query: Query<&Transform, With<VerletPoint>>,
+    points_query: Query<&GlobalTransform, With<VerletPoint>>,
 ) {
     for (entity, stick, max_tension) in sticks_query.iter() {
         let point_a = match points_query.get(stick.point_a_entity) {
@@ -91,7 +91,7 @@ pub fn handle_stick_constraints(
 pub fn debug_draw_sticks(
     mut lines: ResMut<DebugLines>,
     sticks_query: Query<&VerletStick>,
-    points_query: Query<&Transform, With<VerletPoint>>,
+    points_query: Query<&GlobalTransform, With<VerletPoint>>,
 ) {
     for stick in sticks_query.iter() {
         let transform_a = match points_query.get(stick.point_a_entity) {
