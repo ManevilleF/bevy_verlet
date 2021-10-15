@@ -1,12 +1,17 @@
 use bevy::prelude::*;
 use bevy_verlet::{
-    BevyVerletPlugin, VerletLocked, VerletPoint, VerletStick, VerletStickMaxTension,
+    BevyVerletPlugin, VerletConfig, VerletLocked, VerletPoint, VerletStick, VerletStickMaxTension,
 };
 
 fn main() {
     App::build()
         .add_plugins(DefaultPlugins)
         .add_plugin(BevyVerletPlugin::default())
+        .insert_resource(VerletConfig {
+            // parallel_processing_batch_size: Some(100),
+            sticks_computation_depth: 1,
+            ..Default::default()
+        })
         .insert_resource(WindowDescriptor {
             width: 800.,
             height: 1000.,
@@ -21,18 +26,18 @@ fn setup(mut commands: Commands, mut materials: ResMut<Assets<ColorMaterial>>) {
     commands.spawn_bundle(OrthographicCameraBundle::new_2d());
     let material = materials.add(Color::WHITE.into());
     let fixed_material = materials.add(Color::RED.into());
-    let stick_length: f32 = 31.;
+    let stick_length: f32 = 21.;
     let (origin_x, origin_y) = (-450., 350.);
-    let (points_x_count, points_y_count) = (31, 20);
+    let (points_x_count, points_y_count) = (51, 40);
     let mut entities = Vec::new();
     for j in 0..points_y_count {
         for i in 0..points_x_count {
             let mut cmd = commands.spawn_bundle(SpriteBundle {
-                sprite: Sprite::new(Vec2::splat(10.)),
+                sprite: Sprite::new(Vec2::splat(5.)),
                 material: material.clone(),
                 transform: Transform::from_xyz(
-                    origin_x + (30. * i as f32),
-                    origin_y + (-30. * j as f32),
+                    origin_x + (20. * i as f32),
+                    origin_y + (-20. * j as f32),
                     0.,
                 ),
                 ..Default::default()
