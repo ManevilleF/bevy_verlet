@@ -30,6 +30,7 @@ impl VerletConfig {
         1.0 - self.friction
     }
 
+    /// Retrieves the `gravity` field without the `z` axis
     pub fn gravity_2d(&self) -> Vec2 {
         Vec2::new(self.gravity.x, self.gravity.y)
     }
