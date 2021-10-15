@@ -17,12 +17,38 @@ jobs:
       - name: build
         run: cargo build --verbose
 
+  build_features:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: all features
+        run: cargo build --verbose --all-features
+      - name: no default features
+        run: cargo build --verbose --no-default-features
+      - name: debug
+        run: cargo build --verbose --no-default-features --features debug
+
   build_examples:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: build
-        run: cargo build --examples
+      - name: build 2d cloth
+        run: cargo clippy --all-features --example 2d_cloth
+      - name: build 2d cloth cutter
+        run: cargo clippy --all-features --example 2d_cloth_cutter
+      - name: build 2d line
+        run: cargo clippy --all-features --example 2d_line
+      - name: build 3d line
+        run: cargo clippy --all-features --example 3d_line
+      - name: build 3d cloth
+        run: cargo clippy --all-features --example 3d_cloth
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: test
+        run: cargo test --tests --all-features
 
   fmt:
     runs-on: ubuntu-latest
@@ -38,4 +64,11 @@ jobs:
       - name: Cargo clippy installation
         run: rustup component add clippy
       - name: Cargo clippy check
-        run: cargo clippy --all-targets -- -D warnings
+        run: cargo clippy --all-features --all --tests -- -D warnings
+
+  rustdoc:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: rustdoc
+        run: cargo rustdoc --all-features

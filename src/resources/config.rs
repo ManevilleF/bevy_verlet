@@ -10,14 +10,17 @@ pub struct VerletConfig {
     /// Sets the number of sticks computation iteration.
     /// The higher the value, the more precision and less elasticity for the sticks but the cost is increased
     pub sticks_computation_depth: u8,
+    /// Enables parallel computing for sticks and points, setting the parallel batch size
+    pub parallel_processing_batch_size: Option<usize>,
 }
 
 impl Default for VerletConfig {
     fn default() -> Self {
         Self {
             gravity: Vec3::new(0., -9.81, 0.),
-            friction: 0.01,
-            sticks_computation_depth: 1,
+            friction: 0.02,
+            sticks_computation_depth: 2,
+            parallel_processing_batch_size: None,
         }
     }
 }
