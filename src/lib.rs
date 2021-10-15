@@ -25,9 +25,18 @@ pub struct BevyVerletPlugin {
 impl Plugin for BevyVerletPlugin {
     fn build(&self, app: &mut AppBuilder) {
         let system_set = SystemSet::new()
-            .with_system(systems::points::update_points.system())
-            .with_system(systems::sticks::update_sticks.system())
-            .with_system(systems::sticks::handle_stick_constraints.system());
+            .with_system(
+                systems::points::update_points
+                    .system()
+                    .label("points")
+                    .after("sticks"),
+            )
+            .with_system(systems::sticks::update_sticks.system().label("sticks"))
+            .with_system(
+                systems::sticks::handle_stick_constraints
+                    .system()
+                    .after("sticks"),
+            );
         #[cfg(feature = "2d_collisions")]
         let system_set =
             system_set.with_system(systems::collisions::handle_collisions::<Collider2d>.system());
@@ -45,13 +54,23 @@ impl Plugin for BevyVerletPlugin {
         #[cfg(feature = "debug")]
         {
             app.add_plugin(DebugLinesPlugin);
-            app.add_system(systems::sticks::debug_draw_sticks.system());
+            app.add_system(systems::sticks::debug_draw_sticks.system().after("sticks"));
         }
     }
 }
 
 impl Default for BevyVerletPlugin {
     fn default() -> Self {
-        Self { time_step: None }
+        Self {
+            time_step: Some(0.02),
+        }
+    }
+}
+
+impl BevyVerletPlugin {
+    pub fn new(time_step: f64) -> Self {
+        Self {
+            time_step: Some(time_step),
+        }
     }
 }

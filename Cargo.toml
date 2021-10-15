@@ -2,13 +2,13 @@
 name = "bevy_verlet"
 version = "0.1.0"
 edition = "2018"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+authors = ["Felix de Maneville <felix.maneville@gmail.com>"]
+repository = "https://github.com/ManevilleF/bevy_verlet"
+license-file = "./LICENSE"
 
 [features]
 default = ["3d_collisions", "2d_collisions"]
 debug = ["bevy_prototype_debug_lines"]
-shuffle = ["rand"]
 3d_collisions = []
 2d_collisions = []
 
@@ -20,10 +20,6 @@ default-features = false
 
 [dependencies.bevy_prototype_debug_lines]
 version = "0.3"
-optional = true
-
-[dependencies.rand]
-version = "0.8.4"
 optional = true
 
 [dev-dependencies]
