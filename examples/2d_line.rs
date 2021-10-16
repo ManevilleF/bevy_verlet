@@ -3,13 +3,14 @@ use bevy_verlet::{BevyVerletPlugin, VerletLocked, VerletPoint, VerletStick};
 
 fn main() {
     App::build()
-        .add_plugins(DefaultPlugins)
-        .add_plugin(BevyVerletPlugin::default())
         .insert_resource(WindowDescriptor {
+            title: "2D line".to_string(),
             width: 1000.,
             height: 500.,
             ..Default::default()
         })
+        .add_plugins(DefaultPlugins)
+        .add_plugin(BevyVerletPlugin::default())
         .add_startup_system(setup_camera.system())
         .add_startup_system(setup_free_line.system())
         .add_startup_system(setup_fixed_line.system())

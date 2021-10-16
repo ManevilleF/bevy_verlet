@@ -5,47 +5,43 @@ use bevy_verlet::{
 
 fn main() {
     App::build()
-        .add_plugins(DefaultPlugins)
-        .add_plugin(BevyVerletPlugin::default())
         .insert_resource(VerletConfig {
-            // parallel_processing_batch_size: Some(100),
-            sticks_computation_depth: 1,
+            parallel_processing_batch_size: Some(1000),
+            sticks_computation_depth: 2,
             ..Default::default()
         })
         .insert_resource(WindowDescriptor {
-            width: 800.,
-            height: 1000.,
+            title: "2D Cloth cutter".to_string(),
+            width: 1400.,
+            height: 900.,
             ..Default::default()
         })
+        .add_plugins(DefaultPlugins)
+        .add_plugin(BevyVerletPlugin::default())
         .add_startup_system(setup.system())
         .add_system(cut_sticks.system())
         .run();
 }
 
-fn setup(mut commands: Commands, mut materials: ResMut<Assets<ColorMaterial>>) {
+fn setup(mut commands: Commands) {
     commands.spawn_bundle(OrthographicCameraBundle::new_2d());
-    let material = materials.add(Color::WHITE.into());
-    let fixed_material = materials.add(Color::RED.into());
-    let stick_length: f32 = 21.;
-    let (origin_x, origin_y) = (-450., 350.);
-    let (points_x_count, points_y_count) = (51, 40);
+    let stick_length: f32 = 11.;
+    let (origin_x, origin_y) = (-600., 420.);
+    let (points_x_count, points_y_count) = (121, 60);
     let mut entities = Vec::new();
     for j in 0..points_y_count {
         for i in 0..points_x_count {
-            let mut cmd = commands.spawn_bundle(SpriteBundle {
-                sprite: Sprite::new(Vec2::splat(5.)),
-                material: material.clone(),
-                transform: Transform::from_xyz(
-                    origin_x + (20. * i as f32),
-                    origin_y + (-20. * j as f32),
-                    0.,
-                ),
-                ..Default::default()
-            });
-            cmd.insert(VerletPoint::default())
-                .insert(Name::new(format!("Point {}", i)));
+            let mut cmd = commands.spawn();
+            cmd.insert(Transform::from_xyz(
+                origin_x + (10. * i as f32),
+                origin_y + (-10. * j as f32),
+                0.,
+            ))
+            .insert(GlobalTransform::default())
+            .insert(VerletPoint::default())
+            .insert(Name::new(format!("Point {}", i)));
             if j == 0 && i % 2 == 0 {
-                cmd.insert(VerletLocked {}).insert(fixed_material.clone());
+                cmd.insert(VerletLocked {});
             }
             entities.push(cmd.id());
         }
@@ -78,7 +74,7 @@ fn spawn_stick(
                 point_b_entity: *other_entity,
                 length,
             })
-            .insert(VerletStickMaxTension(2.));
+            .insert(VerletStickMaxTension(5.));
     }
 }
 

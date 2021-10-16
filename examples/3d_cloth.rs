@@ -3,13 +3,14 @@ use bevy_verlet::{BevyVerletPlugin, VerletConfig, VerletLocked, VerletPoint, Ver
 
 fn main() {
     App::build()
-        .add_plugins(DefaultPlugins)
-        .add_plugin(BevyVerletPlugin::default())
         .insert_resource(WindowDescriptor {
+            title: "3D cloth".to_string(),
             width: 1000.,
             height: 800.,
             ..Default::default()
         })
+        .add_plugins(DefaultPlugins)
+        .add_plugin(BevyVerletPlugin::default())
         .add_startup_system(setup.system())
         .insert_resource(VerletConfig {
             sticks_computation_depth: 5,

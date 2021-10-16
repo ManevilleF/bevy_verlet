@@ -51,13 +51,11 @@ This feature will add a *system* drawing debug lines for every stick using [bevy
 
 4. 2D cloth cutting
 
-   `cargo run --example 2d_cloth_cutter --features "debug"`
-
-   *Cutting cloth without max tension*
+   `cargo run --example 2d_cloth_cutter --features "debug" --release`
+   
+   > Note: the release flag is necessary for smooth running
+   
    ![Alt](./docs/demo_cloth_cutting.gif "demo gif")
-
-   *Sticks breaking on max tension*
-   ![Alt](./docs/demo_cloth_ripping.gif "demo gif")
 
 ### 3D
 
