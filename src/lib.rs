@@ -1,3 +1,37 @@
+//! # bevy_verlet
+//!
+//! [![workflow](https://github.com/ManevilleF/bevy_verlet/actions/workflows/rust.yml/badge.svg)](https://github.com/ManevilleF/bevy_verlet/actions/workflows/rust.yml)
+//!
+//! [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+//! [![unsafe forbidden](https://img.shields.io/badge/unsafe-forbidden-success.svg)](https://github.com/rust-secure-code/safety-dance/)
+//! [![Crates.io](https://img.shields.io/crates/v/bevy_verlet.svg)](https://crates.io/crates/bevy_verlet)
+//! [![Docs.rs](https://docs.rs/bevy_verlet/badge.svg)](https://docs.rs/bevy_verlet)
+//! [![dependency status](https://deps.rs/crate/bevy_verlet/0.1.1/status.svg)](https://deps.rs/crate/bevy_verlet)
+//!
+//! Simple Verlet points and sticks implementation for bevy.
+//!
+//! ## Features
+//!
+//! You can simply add a `VerletPoint` component on any entity with a `Transform` and the verlet physics will apply.
+//!
+//! Connect points using `VerletStick` to constrain movement (see [examples](./examples)).
+//!
+//! Lock some points by adding the `VerletLocked` component on a `VerletPoint` entity.
+//!
+//! Customize *friction* and *gravity* with the `VerletConfig` resource.
+//!
+//! > Works in 2D and 3D.
+//!
+//! ## Cargo features
+//!
+//! 1. `debug`
+//!
+//! This feature will add a *system* drawing debug lines for every stick using [bevy_prototype_debug_lines](https://crates.io/crates/bevy_prototype_debug_lines)
+//!
+#![deny(warnings)]
+#![forbid(missing_docs)]
+#![forbid(unsafe_code)]
+
 pub use {components::*, resources::*};
 
 #[cfg(any(feature = "2d_collisions", feature = "3d_collisions"))]
@@ -12,6 +46,7 @@ mod systems;
 
 use crate::verlet_time_step::VerletTimeStep;
 use bevy::core::FixedTimestep;
+use bevy::log;
 use bevy::prelude::*;
 #[cfg(feature = "debug")]
 use bevy_prototype_debug_lines::DebugLinesPlugin;
@@ -54,8 +89,9 @@ impl Plugin for BevyVerletPlugin {
         #[cfg(feature = "debug")]
         {
             app.add_plugin(DebugLinesPlugin);
-            app.add_system(systems::sticks::debug_draw_sticks.system().after("sticks"));
+            app.add_system(systems::debug::debug_draw_sticks.system());
         }
+        log::info!("Loaded verlet plugin");
     }
 }
 
@@ -68,6 +104,7 @@ impl Default for BevyVerletPlugin {
 }
 
 impl BevyVerletPlugin {
+    /// Instantiates a new plugin with a custom time step
     pub fn new(time_step: f64) -> Self {
         Self {
             time_step: Some(time_step),

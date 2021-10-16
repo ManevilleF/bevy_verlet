@@ -10,7 +10,7 @@ pub struct VerletConfig {
     /// Sets the number of sticks computation iteration.
     /// The higher the value, the more precision and less elasticity for the sticks but the cost is increased
     pub sticks_computation_depth: u8,
-    /// Enables parallel computing for sticks and points, setting the parallel batch size
+    /// Enables parallel computing for points, setting the parallel batch size
     pub parallel_processing_batch_size: Option<usize>,
 }
 
@@ -30,6 +30,7 @@ impl VerletConfig {
         1.0 - self.friction
     }
 
+    /// Retrieves the `gravity` field without the `z` axis
     pub fn gravity_2d(&self) -> Vec2 {
         Vec2::new(self.gravity.x, self.gravity.y)
     }
