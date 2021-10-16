@@ -21,7 +21,7 @@ fn setup(mut commands: Commands, mut materials: ResMut<Assets<ColorMaterial>>) {
     let fixed_material = materials.add(Color::RED.into());
     let stick_length: f32 = 35.;
     let (origin_x, origin_y) = (-450., 350.);
-    let (points_x_count, points_y_count) = (20, 15);
+    let (points_x_count, points_y_count) = (30, 15);
     let mut entities = Vec::new();
     for j in 0..points_y_count {
         for i in 0..points_x_count {
@@ -30,7 +30,7 @@ fn setup(mut commands: Commands, mut materials: ResMut<Assets<ColorMaterial>>) {
                 material: material.clone(),
                 transform: Transform::from_xyz(
                     origin_x + (30. * i as f32),
-                    origin_y + (-30. * (j + i / 2) as f32),
+                    origin_y + (-30. * (j + i / 3) as f32),
                     0.,
                 ),
                 ..Default::default()

@@ -6,7 +6,7 @@ fn main() {
         .insert_resource(WindowDescriptor {
             title: "3D line".to_string(),
             width: 1000.,
-            height: 500.,
+            height: 800.,
             ..Default::default()
         })
         .add_plugins(DefaultPlugins)
