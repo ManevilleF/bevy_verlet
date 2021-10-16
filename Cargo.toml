@@ -9,6 +9,8 @@ exclude = ["examples", "docs"]
 description = "Verlet physics implementation in bevy"
 keywords = ["verlet", "physics", "bevy", "cloth"]
 categories = ["game-engines", "game-development"]
+readme = "README.md"
+documentation = "https://docs.rs/bevy_verlet"
 
 [features]
 default = []

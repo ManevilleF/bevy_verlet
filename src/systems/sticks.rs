@@ -2,10 +2,18 @@ use crate::components::{VerletLocked, VerletPoint, VerletStick};
 use crate::{VerletConfig, VerletStickMaxTension};
 use bevy::log;
 use bevy::prelude::*;
-use bevy::tasks::ComputeTaskPool;
-#[cfg(feature = "debug")]
-use bevy_prototype_debug_lines::DebugLines;
-use std::sync::RwLock;
+
+macro_rules! get_point {
+    ($res:expr) => {
+        match $res {
+            Ok((p, locked)) => (p, locked.is_some()),
+            Err(e) => {
+                log::error!("Could not find point entity for stick: {}", e);
+                continue;
+            }
+        }
+    };
+}
 
 #[allow(clippy::type_complexity)]
 pub fn update_sticks(
@@ -19,22 +27,9 @@ pub fn update_sticks(
     let config = config.map(|g| *g).unwrap_or_default();
     for _ in 0..=config.sticks_computation_depth {
         for stick in sticks_query.iter() {
-            let (point_a, point_a_locked) = match points_query.q0().get(stick.point_a_entity) {
-                Ok(p) => p,
-                Err(e) => {
-                    log::error!("Could not find point_a entity for stick: {}", e);
-                    continue;
-                }
-            };
-            let (point_b, point_b_locked) = match points_query.q0().get(stick.point_b_entity) {
-                Ok(p) => p,
-                Err(e) => {
-                    log::error!("Could not find point_b entity for stick: {}", e);
-                    continue;
-                }
-            };
-            let point_a_locked = point_a_locked.is_some();
-            let point_b_locked = point_b_locked.is_some();
+            let (point_a, point_a_locked) = get_point!(points_query.q0().get(stick.point_a_entity));
+            let (point_b, point_b_locked) = get_point!(points_query.q0().get(stick.point_b_entity));
+
             if point_a_locked && point_b_locked {
                 continue;
             }
@@ -83,57 +78,13 @@ fn handle_stick_constraint(
 }
 
 pub fn handle_stick_constraints(
-    pool: Res<ComputeTaskPool>,
     mut commands: Commands,
     sticks_query: Query<(Entity, &VerletStick, &VerletStickMaxTension)>,
     points_query: Query<&Transform, With<VerletPoint>>,
-    config: Option<Res<VerletConfig>>,
 ) {
-    let config = config.map(|g| *g).unwrap_or_default();
-    if let Some(batch_size) = config.parallel_processing_batch_size {
-        let sticks_to_destroy = RwLock::new(Vec::new());
-        sticks_query.par_for_each(&pool, batch_size, |(entity, stick, max_tension)| {
-            if let Some(entity) = handle_stick_constraint(entity, stick, max_tension, &points_query)
-            {
-                let mut lock = sticks_to_destroy.write().unwrap();
-                lock.push(entity);
-            }
-        });
-        let lock = sticks_to_destroy.read().unwrap();
-        for entity in lock.iter() {
-            commands.entity(*entity).despawn_recursive();
+    for (entity, stick, max_tension) in sticks_query.iter() {
+        if let Some(entity) = handle_stick_constraint(entity, stick, max_tension, &points_query) {
+            commands.entity(entity).despawn_recursive();
         }
-    } else {
-        for (entity, stick, max_tension) in sticks_query.iter() {
-            if let Some(entity) = handle_stick_constraint(entity, stick, max_tension, &points_query)
-            {
-                commands.entity(entity).despawn_recursive();
-            }
-        }
-    }
-}
-
-#[cfg(feature = "debug")]
-pub fn debug_draw_sticks(
-    mut lines: ResMut<DebugLines>,
-    sticks_query: Query<&VerletStick>,
-    points_query: Query<&Transform, With<VerletPoint>>,
-) {
-    for stick in sticks_query.iter() {
-        let transform_a = match points_query.get(stick.point_a_entity) {
-            Ok(p) => p,
-            Err(e) => {
-                log::error!("Could not find point_a transform for stick: {}", e);
-                continue;
-            }
-        };
-        let transform_b = match points_query.get(stick.point_b_entity) {
-            Ok(p) => p,
-            Err(e) => {
-                log::error!("Could not find point_b transform for stick: {}", e);
-                continue;
-            }
-        };
-        lines.line(transform_a.translation, transform_b.translation, 0.);
     }
 }

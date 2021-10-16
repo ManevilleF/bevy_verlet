@@ -40,6 +40,7 @@ mod systems;
 
 use crate::verlet_time_step::VerletTimeStep;
 use bevy::core::FixedTimestep;
+use bevy::log;
 use bevy::prelude::*;
 #[cfg(feature = "debug")]
 use bevy_prototype_debug_lines::DebugLinesPlugin;
@@ -76,8 +77,9 @@ impl Plugin for BevyVerletPlugin {
         #[cfg(feature = "debug")]
         {
             app.add_plugin(DebugLinesPlugin);
-            app.add_system(systems::sticks::debug_draw_sticks.system().after("sticks"));
+            app.add_system(systems::debug::debug_draw_sticks.system());
         }
+        log::info!("Loaded verlet plugin");
     }
 }
 
