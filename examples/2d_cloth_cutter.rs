@@ -98,7 +98,7 @@ fn cut_sticks(
         None => return,
         Some(p) => mouse_coords(window, p),
     };
-    let l = 40.;
+    let l = 15.;
     for (entity, stick) in sticks.iter() {
         let point_a = points.get(stick.point_a_entity).unwrap();
         let point_b = points.get(stick.point_b_entity).unwrap();
