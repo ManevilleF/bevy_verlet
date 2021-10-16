@@ -7,7 +7,6 @@ fn main() {
     App::build()
         .insert_resource(VerletConfig {
             parallel_processing_batch_size: Some(1000),
-            sticks_computation_depth: 2,
             ..Default::default()
         })
         .insert_resource(WindowDescriptor {

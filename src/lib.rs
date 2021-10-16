@@ -54,18 +54,9 @@ pub struct BevyVerletPlugin {
 impl Plugin for BevyVerletPlugin {
     fn build(&self, app: &mut AppBuilder) {
         let system_set = SystemSet::new()
-            .with_system(
-                systems::points::update_points
-                    .system()
-                    .label("points")
-                    .after("sticks"),
-            )
-            .with_system(systems::sticks::update_sticks.system().label("sticks"))
-            .with_system(
-                systems::sticks::handle_stick_constraints
-                    .system()
-                    .after("sticks"),
-            );
+            .with_system(systems::points::update_points.system())
+            .with_system(systems::sticks::update_sticks.system())
+            .with_system(systems::sticks::handle_stick_constraints.system());
         let system_set = if let Some(step) = self.time_step {
             app.insert_resource(VerletTimeStep::FixedDeltaTime(step));
             system_set.with_run_criteria(FixedTimestep::step(step))
