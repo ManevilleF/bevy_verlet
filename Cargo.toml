@@ -32,3 +32,31 @@ optional = true
 version = "0.5"
 features = ["render", "bevy_winit", "png", "x11", "bevy_wgpu"]
 default-features = false
+
+# Enable optimizations for dependencies (incl. Bevy), but not for our code:
+[profile.dev.package."*"]
+opt-level = 3
+
+# Maybe also enable only a small amount of optimization for our code:
+[profile.dev]
+opt-level = 1
+
+[[example]]
+name = "2d_cloth"
+required-features = ["debug"]
+
+[[example]]
+name = "2d_cloth_cutter"
+required-features = ["debug"]
+
+[[example]]
+name = "2d_line"
+required-features = ["debug"]
+
+[[example]]
+name = "3d_line"
+required-features = ["debug"]
+
+[[example]]
+name = "3d_cloth"
+required-features = ["debug"]
