@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+- Rust 2021 edition
+
 ## 0.1.1
 
 - The `VerletConfig::parallel_processing_batch_size` is only used for `VerletPoint` processing
