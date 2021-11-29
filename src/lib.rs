@@ -1,4 +1,4 @@
-//! # bevy_verlet
+//! # Bevy Verlet
 //!
 //! [![workflow](https://github.com/ManevilleF/bevy_verlet/actions/workflows/rust.yml/badge.svg)](https://github.com/ManevilleF/bevy_verlet/actions/workflows/rust.yml)
 //!
@@ -26,11 +26,21 @@
 //!
 //! 1. `debug`
 //!
-//! This feature will add a *system* drawing debug lines for every stick using [bevy_prototype_debug_lines](https://crates.io/crates/bevy_prototype_debug_lines)
+//! This feature will add a *system* drawing debug lines for every stick using [`bevy_prototype_debug_lines`](https://crates.io/crates/bevy_prototype_debug_lines)
 //!
-#![deny(warnings)]
 #![forbid(missing_docs)]
 #![forbid(unsafe_code)]
+#![warn(
+    clippy::all,
+    clippy::correctness,
+    clippy::suspicious,
+    clippy::style,
+    clippy::complexity,
+    clippy::perf,
+    clippy::nursery,
+    nonstandard_style
+)]
+#![allow(clippy::module_name_repetitions)]
 
 pub use {components::*, resources::*};
 
@@ -93,7 +103,7 @@ impl Default for BevyVerletPlugin {
 
 impl BevyVerletPlugin {
     /// Instantiates a new plugin with a custom time step
-    pub fn new(time_step: f64) -> Self {
+    pub const fn new(time_step: f64) -> Self {
         Self {
             time_step: Some(time_step),
         }

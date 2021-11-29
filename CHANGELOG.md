@@ -3,6 +3,7 @@
 ## Unreleased
 
 - Rust 2021 edition
+- Clippy extra restrictions
 
 ## 0.1.1
 

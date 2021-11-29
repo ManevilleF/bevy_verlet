@@ -27,20 +27,20 @@ pub fn update_sticks(
     let config = config.map(|g| *g).unwrap_or_default();
     for _ in 0..=config.sticks_computation_depth {
         for stick in sticks_query.iter() {
-            let (point_a, point_a_locked) = get_point!(points_query.q0().get(stick.point_a_entity));
-            let (point_b, point_b_locked) = get_point!(points_query.q0().get(stick.point_b_entity));
+            let (point_a, a_locked) = get_point!(points_query.q0().get(stick.point_a_entity));
+            let (point_b, b_locked) = get_point!(points_query.q0().get(stick.point_b_entity));
 
-            if point_a_locked && point_b_locked {
+            if a_locked && b_locked {
                 continue;
             }
             let center: Vec3 = (point_a.translation + point_b.translation) / 2.;
             let direction: Vec3 = (point_a.translation - point_b.translation).normalize();
-            if !point_a_locked {
+            if !a_locked {
                 let mut point_a_transform =
                     points_query.q1_mut().get_mut(stick.point_a_entity).unwrap();
                 point_a_transform.translation = center + direction * stick.length / 2.;
             }
-            if !point_b_locked {
+            if !b_locked {
                 let mut point_b_transform =
                     points_query.q1_mut().get_mut(stick.point_b_entity).unwrap();
                 point_b_transform.translation = center - direction * stick.length / 2.;
