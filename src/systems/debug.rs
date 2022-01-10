@@ -15,7 +15,6 @@ macro_rules! get_point_debug {
     };
 }
 
-#[cfg(feature = "debug")]
 fn draw_stick(
     stick: &VerletStick,
     points_query: &Query<&Transform, With<VerletPoint>>,
@@ -25,7 +24,6 @@ fn draw_stick(
     Some((transform_a.translation, transform_b.translation))
 }
 
-#[cfg(feature = "debug")]
 pub fn debug_draw_sticks(
     mut lines: ResMut<DebugLines>,
     sticks_query: Query<&VerletStick>,

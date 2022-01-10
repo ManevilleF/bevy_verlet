@@ -19,16 +19,38 @@ debug = ["bevy_prototype_debug_lines"]
 [dependencies]
 
 [dependencies.bevy]
-version = "0.5"
+version = "0.6"
 default-features = false
 
 [dependencies.bevy_prototype_debug_lines]
-version = "0.3"
+git = "https://github.com/nicopap/bevy_debug_lines"
+branch = "bevy-main"
+version = "0.4"
 optional = true
 
 [dev-dependencies]
 
 [dev-dependencies.bevy]
-version = "0.5"
-features = ["render", "bevy_winit", "png", "x11", "bevy_wgpu"]
+version = "0.6"
+features = ["render", "bevy_winit", "x11"]
 default-features = false
+
+[[example]]
+name = "2d_cloth"
+required-features = ["debug"]
+
+[[example]]
+name = "2d_cloth_cutter"
+required-features = ["debug"]
+
+[[example]]
+name = "2d_line"
+required-features = ["debug"]
+
+[[example]]
+name = "3d_cloth"
+required-features = ["debug"]
+
+[[example]]
+name = "3d_line"
+required-features = ["debug"]

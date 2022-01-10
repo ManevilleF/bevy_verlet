@@ -2,7 +2,7 @@ use bevy::prelude::*;
 use bevy_verlet::{BevyVerletPlugin, VerletConfig, VerletLocked, VerletPoint, VerletStick};
 
 fn main() {
-    App::build()
+    App::new()
         .insert_resource(WindowDescriptor {
             title: "3D line".to_string(),
             width: 1000.,
@@ -11,9 +11,9 @@ fn main() {
         })
         .add_plugins(DefaultPlugins)
         .add_plugin(BevyVerletPlugin::default())
-        .add_startup_system(setup_camera.system())
-        .add_startup_system(setup_free_line.system())
-        .add_startup_system(setup_fixed_line.system())
+        .add_startup_system(setup_camera)
+        .add_startup_system(setup_free_line)
+        .add_startup_system(setup_fixed_line)
         .insert_resource(VerletConfig {
             sticks_computation_depth: 5,
             ..Default::default()

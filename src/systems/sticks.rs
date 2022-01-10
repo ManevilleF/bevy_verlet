@@ -6,7 +6,7 @@ use bevy::prelude::*;
 macro_rules! get_point {
     ($res:expr) => {
         match $res {
-            Ok((p, locked)) => (p, locked.is_some()),
+            Ok((p, locked)) => (p.translation, locked.is_some()),
             Err(e) => {
                 log::error!("Could not find point entity for stick: {}", e);
                 continue;
@@ -20,8 +20,8 @@ pub fn update_sticks(
     config: Option<Res<VerletConfig>>,
     sticks_query: Query<&VerletStick>,
     mut points_query: QuerySet<(
-        Query<(&Transform, Option<&VerletLocked>), With<VerletPoint>>,
-        Query<&mut Transform, With<VerletPoint>>,
+        QueryState<(&Transform, Option<&VerletLocked>), With<VerletPoint>>,
+        QueryState<&mut Transform, With<VerletPoint>>,
     )>,
 ) {
     let config = config.map(|g| *g).unwrap_or_default();

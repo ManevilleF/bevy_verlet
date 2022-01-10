@@ -2,7 +2,7 @@ use bevy::prelude::*;
 use bevy_verlet::{BevyVerletPlugin, VerletLocked, VerletPoint, VerletStick};
 
 fn main() {
-    App::build()
+    App::new()
         .insert_resource(WindowDescriptor {
             title: "2D line".to_string(),
             width: 1000.,
@@ -11,9 +11,9 @@ fn main() {
         })
         .add_plugins(DefaultPlugins)
         .add_plugin(BevyVerletPlugin::default())
-        .add_startup_system(setup_camera.system())
-        .add_startup_system(setup_free_line.system())
-        .add_startup_system(setup_fixed_line.system())
+        .add_startup_system(setup_camera)
+        .add_startup_system(setup_free_line)
+        .add_startup_system(setup_fixed_line)
         .run();
 }
 
@@ -21,9 +21,7 @@ fn setup_camera(mut commands: Commands) {
     commands.spawn_bundle(OrthographicCameraBundle::new_2d());
 }
 
-fn setup_free_line(mut commands: Commands, mut materials: ResMut<Assets<ColorMaterial>>) {
-    let material = materials.add(Color::WHITE.into());
-    let fixed_material = materials.add(Color::RED.into());
+fn setup_free_line(mut commands: Commands) {
     let stick_length: f32 = 50.;
     let points_count = 10;
     let mut previous_entity = None;
@@ -84,10 +82,13 @@ fn setup_fixed_line(mut commands: Commands, mut materials: ResMut<Assets<ColorMa
     }
 }
 
-fn sprite_bundle(material: Handle<ColorMaterial>, pos: Vec2) -> SpriteBundle {
+fn sprite_bundle(color: Color, pos: Vec2) -> SpriteBundle {
     SpriteBundle {
-        sprite: Sprite::new(Vec2::splat(10.)),
-        material,
+        sprite: Sprite {
+            color,
+            custom_size: Some(Vec2::splat(10.)),
+            ..Default::default()
+        },
         transform: Transform::from_xyz(pos.x, pos.y, 0.),
         ..Default::default()
     }

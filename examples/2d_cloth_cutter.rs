@@ -4,7 +4,7 @@ use bevy_verlet::{
 };
 
 fn main() {
-    App::build()
+    App::new()
         .insert_resource(VerletConfig {
             parallel_processing_batch_size: Some(1000),
             sticks_computation_depth: 2,
@@ -18,8 +18,8 @@ fn main() {
         })
         .add_plugins(DefaultPlugins)
         .add_plugin(BevyVerletPlugin::default())
-        .add_startup_system(setup.system())
-        .add_system(cut_sticks.system())
+        .add_startup_system(setup)
+        .add_system(cut_sticks)
         .run();
 }
 

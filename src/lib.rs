@@ -62,20 +62,15 @@ pub struct BevyVerletPlugin {
 }
 
 impl Plugin for BevyVerletPlugin {
-    fn build(&self, app: &mut AppBuilder) {
+    fn build(&self, app: &mut App) {
         let system_set = SystemSet::new()
             .with_system(
                 systems::points::update_points
-                    .system()
                     .label("points")
                     .after("sticks"),
             )
-            .with_system(systems::sticks::update_sticks.system().label("sticks"))
-            .with_system(
-                systems::sticks::handle_stick_constraints
-                    .system()
-                    .after("sticks"),
-            );
+            .with_system(systems::sticks::update_sticks.label("sticks"))
+            .with_system(systems::sticks::handle_stick_constraints.after("sticks"));
         let system_set = if let Some(step) = self.time_step {
             app.insert_resource(VerletTimeStep::FixedDeltaTime(step));
             system_set.with_run_criteria(FixedTimestep::step(step))
@@ -86,8 +81,8 @@ impl Plugin for BevyVerletPlugin {
         app.add_system_set(system_set);
         #[cfg(feature = "debug")]
         {
-            app.add_plugin(DebugLinesPlugin);
-            app.add_system(systems::debug::debug_draw_sticks.system());
+            app.add_plugin(DebugLinesPlugin::default());
+            app.add_system(systems::debug::debug_draw_sticks);
         }
         log::info!("Loaded verlet plugin");
     }
