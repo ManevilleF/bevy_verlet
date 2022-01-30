@@ -48,7 +48,7 @@ fn setup_free_line(
         cmd.insert(VerletPoint::default())
             .insert(Name::new(format!("Point {}", i)));
         if previous_entity.is_none() {
-            cmd.insert(VerletLocked {}).insert(fixed_material.clone());
+            cmd.insert(VerletLocked).insert(fixed_material.clone());
         }
         let entity = cmd.id();
         if let Some(e) = previous_entity {
@@ -86,7 +86,7 @@ fn setup_fixed_line(
         cmd.insert(VerletPoint::default())
             .insert(Name::new(format!("Point {}", i)));
         if previous_entity.is_none() || i == points_count {
-            cmd.insert(VerletLocked {}).insert(fixed_material.clone());
+            cmd.insert(VerletLocked).insert(fixed_material.clone());
         }
         let entity = cmd.id();
         if let Some(e) = previous_entity {

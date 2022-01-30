@@ -15,7 +15,11 @@ macro_rules! get_point {
     };
 }
 
-#[allow(clippy::type_complexity)]
+#[allow(
+    clippy::type_complexity,
+    clippy::needless_pass_by_value,
+    clippy::similar_names
+)]
 pub fn update_sticks(
     config: Option<Res<VerletConfig>>,
     sticks_query: Query<&VerletStick>,
@@ -27,14 +31,14 @@ pub fn update_sticks(
     let config = config.map(|g| *g).unwrap_or_default();
     for _ in 0..=config.sticks_computation_depth {
         for stick in sticks_query.iter() {
-            let (point_a, a_locked) = get_point!(points_query.q0().get(stick.point_a_entity));
-            let (point_b, b_locked) = get_point!(points_query.q0().get(stick.point_b_entity));
+            let (coords_a, a_locked) = get_point!(points_query.q0().get(stick.point_a_entity));
+            let (coords_b, b_locked) = get_point!(points_query.q0().get(stick.point_b_entity));
 
             if a_locked && b_locked {
                 continue;
             }
-            let center: Vec3 = (point_a.translation + point_b.translation) / 2.;
-            let direction: Vec3 = (point_a.translation - point_b.translation).normalize();
+            let center: Vec3 = (coords_a + coords_b) / 2.;
+            let direction: Vec3 = (coords_a - coords_b).normalize();
             if !a_locked {
                 let mut point_a_transform =
                     points_query.q1_mut().get_mut(stick.point_a_entity).unwrap();
@@ -77,6 +81,7 @@ fn handle_stick_constraint(
     }
 }
 
+#[allow(clippy::needless_pass_by_value)]
 pub fn handle_stick_constraints(
     mut commands: Commands,
     sticks_query: Query<(Entity, &VerletStick, &VerletStickMaxTension)>,

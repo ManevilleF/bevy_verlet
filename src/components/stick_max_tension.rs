@@ -1,4 +1,4 @@
-use bevy::prelude::Component;
+use bevy::prelude::{Component, Reflect};
 
 /// Component adding a maximum tension to a [`VerletStick`][VerletStick]
 ///
@@ -8,5 +8,5 @@ use bevy::prelude::Component;
 /// If you set it to `2.0` the stick will break when stretched to twice its `length`
 ///
 /// [VerletStick]: struct.VerletStick.html
-#[derive(Debug, Clone, Component)]
+#[derive(Debug, Clone, Component, Reflect)]
 pub struct VerletStickMaxTension(pub f32);

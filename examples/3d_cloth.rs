@@ -50,7 +50,7 @@ fn setup(
             cmd.insert(VerletPoint::default())
                 .insert(Name::new(format!("Point {}", i)));
             if j == 0 {
-                cmd.insert(VerletLocked {}).insert(fixed_material.clone());
+                cmd.insert(VerletLocked).insert(fixed_material.clone());
             }
             entities.push(cmd.id());
         }

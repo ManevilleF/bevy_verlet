@@ -1,6 +1,6 @@
 <!-- cargo-sync-readme start -->
 
-# bevy_verlet
+# Verlet Integration for Bevy
 
 [![workflow](https://github.com/ManevilleF/bevy_verlet/actions/workflows/rust.yml/badge.svg)](https://github.com/ManevilleF/bevy_verlet/actions/workflows/rust.yml)
 
@@ -8,7 +8,7 @@
 [![unsafe forbidden](https://img.shields.io/badge/unsafe-forbidden-success.svg)](https://github.com/rust-secure-code/safety-dance/)
 [![Crates.io](https://img.shields.io/crates/v/bevy_verlet.svg)](https://crates.io/crates/bevy_verlet)
 [![Docs.rs](https://docs.rs/bevy_verlet/badge.svg)](https://docs.rs/bevy_verlet)
-[![dependency status](https://deps.rs/crate/bevy_verlet/0.1.0/status.svg)](https://deps.rs/crate/bevy_verlet)
+[![dependency status](https://deps.rs/crate/bevy_verlet/0.1.1/status.svg)](https://deps.rs/crate/bevy_verlet)
 
 Simple Verlet points and sticks implementation for bevy.
 
@@ -28,7 +28,7 @@ Customize *friction* and *gravity* with the `VerletConfig` resource.
 
 1. `debug`
 
-This feature will add a *system* drawing debug lines for every stick using [bevy_prototype_debug_lines](https://crates.io/crates/bevy_prototype_debug_lines)
+This feature will add a *system* drawing debug lines for every stick using [`bevy_prototype_debug_lines`](https://crates.io/crates/bevy_prototype_debug_lines)
 
 
 <!-- cargo-sync-readme end -->

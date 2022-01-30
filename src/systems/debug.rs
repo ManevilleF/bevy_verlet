@@ -24,6 +24,7 @@ fn draw_stick(
     Some((transform_a.translation, transform_b.translation))
 }
 
+#[allow(clippy::needless_pass_by_value)]
 pub fn debug_draw_sticks(
     mut lines: ResMut<DebugLines>,
     sticks_query: Query<&VerletStick>,

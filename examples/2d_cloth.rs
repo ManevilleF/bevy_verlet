@@ -39,7 +39,7 @@ fn setup(mut commands: Commands) {
             cmd.insert(VerletPoint::default())
                 .insert(Name::new(format!("Point {}", i)));
             if j == 0 {
-                cmd.insert(VerletLocked {});
+                cmd.insert(VerletLocked);
             }
             entities.push(cmd.id());
         }
