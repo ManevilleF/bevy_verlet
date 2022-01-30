@@ -39,14 +39,13 @@ pub fn update_sticks(
             }
             let center: Vec3 = (coords_a + coords_b) / 2.;
             let direction: Vec3 = (coords_a - coords_b).normalize();
+            let mut q1 = points_query.q1();
             if !a_locked {
-                let mut point_a_transform =
-                    points_query.q1_mut().get_mut(stick.point_a_entity).unwrap();
+                let mut point_a_transform = q1.get_mut(stick.point_a_entity).unwrap();
                 point_a_transform.translation = center + direction * stick.length / 2.;
             }
             if !b_locked {
-                let mut point_b_transform =
-                    points_query.q1_mut().get_mut(stick.point_b_entity).unwrap();
+                let mut point_b_transform = q1.get_mut(stick.point_b_entity).unwrap();
                 point_b_transform.translation = center - direction * stick.length / 2.;
             }
         }
