@@ -26,14 +26,12 @@ fn setup_free_line(mut commands: Commands) {
     let points_count = 10;
     let mut previous_entity = None;
     for i in 0..=points_count {
-        let mut cmd = commands.spawn_bundle(sprite_bundle(
-            material.clone(),
-            Vec2::new(50. * i as f32, 300.),
-        ));
+        let mut cmd =
+            commands.spawn_bundle(sprite_bundle(Color::WHITE, Vec2::new(50. * i as f32, 300.)));
         cmd.insert(VerletPoint::default())
             .insert(Name::new(format!("Point {}", i)));
         if previous_entity.is_none() {
-            cmd.insert(VerletLocked).insert(fixed_material.clone());
+            cmd.insert(VerletLocked);
         }
         let entity = cmd.id();
         if let Some(e) = previous_entity {
@@ -50,22 +48,20 @@ fn setup_free_line(mut commands: Commands) {
     }
 }
 
-fn setup_fixed_line(mut commands: Commands, mut materials: ResMut<Assets<ColorMaterial>>) {
-    let material = materials.add(Color::WHITE.into());
-    let fixed_material = materials.add(Color::RED.into());
+fn setup_fixed_line(mut commands: Commands) {
     let stick_length: f32 = 35.;
     let points_count = 20;
     let start_pos = -450.;
     let mut previous_entity = None;
     for i in 0..=points_count {
         let mut cmd = commands.spawn_bundle(sprite_bundle(
-            material.clone(),
+            Color::WHITE,
             Vec2::new(start_pos + 30. * i as f32, 0.),
         ));
         cmd.insert(VerletPoint::default())
             .insert(Name::new(format!("Point {}", i)));
         if previous_entity.is_none() || i == points_count {
-            cmd.insert(VerletLocked).insert(fixed_material.clone());
+            cmd.insert(VerletLocked);
         }
         let entity = cmd.id();
         if let Some(e) = previous_entity {
