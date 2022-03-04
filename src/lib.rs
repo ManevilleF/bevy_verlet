@@ -1,4 +1,4 @@
-//! # Bevy Verlet
+//! # Verlet Integration for Bevy
 //!
 //! [![workflow](https://github.com/ManevilleF/bevy_verlet/actions/workflows/rust.yml/badge.svg)](https://github.com/ManevilleF/bevy_verlet/actions/workflows/rust.yml)
 //!
@@ -31,16 +31,16 @@
 #![forbid(missing_docs)]
 #![forbid(unsafe_code)]
 #![warn(
-    clippy::all,
-    clippy::correctness,
-    clippy::suspicious,
-    clippy::style,
-    clippy::complexity,
-    clippy::perf,
     clippy::nursery,
-    nonstandard_style
+    clippy::pedantic,
+    nonstandard_style,
+    rustdoc::broken_intra_links
 )]
-#![allow(clippy::module_name_repetitions, clippy::redundant_pub_crate)]
+#![allow(
+    clippy::default_trait_access,
+    clippy::module_name_repetitions,
+    clippy::redundant_pub_crate
+)]
 
 pub use {components::*, resources::*};
 
@@ -62,20 +62,15 @@ pub struct BevyVerletPlugin {
 }
 
 impl Plugin for BevyVerletPlugin {
-    fn build(&self, app: &mut AppBuilder) {
+    fn build(&self, app: &mut App) {
         let system_set = SystemSet::new()
             .with_system(
                 systems::points::update_points
-                    .system()
                     .label("points")
                     .after("sticks"),
             )
-            .with_system(systems::sticks::update_sticks.system().label("sticks"))
-            .with_system(
-                systems::sticks::handle_stick_constraints
-                    .system()
-                    .after("sticks"),
-            );
+            .with_system(systems::sticks::update_sticks.label("sticks"))
+            .with_system(systems::sticks::handle_stick_constraints.after("sticks"));
         let system_set = if let Some(step) = self.time_step {
             app.insert_resource(VerletTimeStep::FixedDeltaTime(step));
             system_set.with_run_criteria(FixedTimestep::step(step))
@@ -86,9 +81,13 @@ impl Plugin for BevyVerletPlugin {
         app.add_system_set(system_set);
         #[cfg(feature = "debug")]
         {
-            app.add_plugin(DebugLinesPlugin);
-            app.add_system(systems::debug::debug_draw_sticks.system());
+            app.add_plugin(DebugLinesPlugin::default());
+            app.add_system(systems::debug::debug_draw_sticks);
         }
+        app.register_type::<VerletPoint>()
+            .register_type::<VerletLocked>()
+            .register_type::<VerletStick>()
+            .register_type::<VerletStickMaxTension>();
         log::info!("Loaded verlet plugin");
     }
 }
@@ -103,6 +102,8 @@ impl Default for BevyVerletPlugin {
 
 impl BevyVerletPlugin {
     /// Instantiates a new plugin with a custom time step
+    #[must_use]
+    #[inline]
     pub const fn new(time_step: f64) -> Self {
         Self {
             time_step: Some(time_step),

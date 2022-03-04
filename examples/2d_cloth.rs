@@ -2,7 +2,7 @@ use bevy::prelude::*;
 use bevy_verlet::{BevyVerletPlugin, VerletLocked, VerletPoint, VerletStick};
 
 fn main() {
-    App::build()
+    App::new()
         .insert_resource(WindowDescriptor {
             title: "2D cloth".to_string(),
             width: 1000.,
@@ -11,14 +11,12 @@ fn main() {
         })
         .add_plugins(DefaultPlugins)
         .add_plugin(BevyVerletPlugin::default())
-        .add_startup_system(setup.system())
+        .add_startup_system(setup)
         .run();
 }
 
-fn setup(mut commands: Commands, mut materials: ResMut<Assets<ColorMaterial>>) {
+fn setup(mut commands: Commands) {
     commands.spawn_bundle(OrthographicCameraBundle::new_2d());
-    let material = materials.add(Color::WHITE.into());
-    let fixed_material = materials.add(Color::RED.into());
     let stick_length: f32 = 35.;
     let (origin_x, origin_y) = (-450., 350.);
     let (points_x_count, points_y_count) = (30, 15);
@@ -26,8 +24,11 @@ fn setup(mut commands: Commands, mut materials: ResMut<Assets<ColorMaterial>>) {
     for j in 0..points_y_count {
         for i in 0..points_x_count {
             let mut cmd = commands.spawn_bundle(SpriteBundle {
-                sprite: Sprite::new(Vec2::splat(10.)),
-                material: material.clone(),
+                sprite: Sprite {
+                    color: if j == 0 { Color::RED } else { Color::WHITE },
+                    custom_size: Some(Vec2::splat(10.)),
+                    ..Default::default()
+                },
                 transform: Transform::from_xyz(
                     origin_x + (30. * i as f32),
                     origin_y + (-30. * (j + i / 3) as f32),
@@ -38,7 +39,7 @@ fn setup(mut commands: Commands, mut materials: ResMut<Assets<ColorMaterial>>) {
             cmd.insert(VerletPoint::default())
                 .insert(Name::new(format!("Point {}", i)));
             if j == 0 {
-                cmd.insert(VerletLocked {}).insert(fixed_material.clone());
+                cmd.insert(VerletLocked);
             }
             entities.push(cmd.id());
         }

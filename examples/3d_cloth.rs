@@ -2,7 +2,7 @@ use bevy::prelude::*;
 use bevy_verlet::{BevyVerletPlugin, VerletConfig, VerletLocked, VerletPoint, VerletStick};
 
 fn main() {
-    App::build()
+    App::new()
         .insert_resource(WindowDescriptor {
             title: "3D cloth".to_string(),
             width: 1000.,
@@ -11,7 +11,7 @@ fn main() {
         })
         .add_plugins(DefaultPlugins)
         .add_plugin(BevyVerletPlugin::default())
-        .add_startup_system(setup.system())
+        .add_startup_system(setup)
         .insert_resource(VerletConfig {
             sticks_computation_depth: 5,
             ..Default::default()
@@ -50,7 +50,7 @@ fn setup(
             cmd.insert(VerletPoint::default())
                 .insert(Name::new(format!("Point {}", i)));
             if j == 0 {
-                cmd.insert(VerletLocked {}).insert(fixed_material.clone());
+                cmd.insert(VerletLocked).insert(fixed_material.clone());
             }
             entities.push(cmd.id());
         }

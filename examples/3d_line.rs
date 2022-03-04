@@ -2,7 +2,7 @@ use bevy::prelude::*;
 use bevy_verlet::{BevyVerletPlugin, VerletConfig, VerletLocked, VerletPoint, VerletStick};
 
 fn main() {
-    App::build()
+    App::new()
         .insert_resource(WindowDescriptor {
             title: "3D line".to_string(),
             width: 1000.,
@@ -11,9 +11,9 @@ fn main() {
         })
         .add_plugins(DefaultPlugins)
         .add_plugin(BevyVerletPlugin::default())
-        .add_startup_system(setup_camera.system())
-        .add_startup_system(setup_free_line.system())
-        .add_startup_system(setup_fixed_line.system())
+        .add_startup_system(setup_camera)
+        .add_startup_system(setup_free_line)
+        .add_startup_system(setup_fixed_line)
         .insert_resource(VerletConfig {
             sticks_computation_depth: 5,
             ..Default::default()
@@ -48,7 +48,7 @@ fn setup_free_line(
         cmd.insert(VerletPoint::default())
             .insert(Name::new(format!("Point {}", i)));
         if previous_entity.is_none() {
-            cmd.insert(VerletLocked {}).insert(fixed_material.clone());
+            cmd.insert(VerletLocked).insert(fixed_material.clone());
         }
         let entity = cmd.id();
         if let Some(e) = previous_entity {
@@ -86,7 +86,7 @@ fn setup_fixed_line(
         cmd.insert(VerletPoint::default())
             .insert(Name::new(format!("Point {}", i)));
         if previous_entity.is_none() || i == points_count {
-            cmd.insert(VerletLocked {}).insert(fixed_material.clone());
+            cmd.insert(VerletLocked).insert(fixed_material.clone());
         }
         let entity = cmd.id();
         if let Some(e) = previous_entity {
