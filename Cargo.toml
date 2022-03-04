@@ -23,9 +23,7 @@ version = "0.6"
 default-features = false
 
 [dependencies.bevy_prototype_debug_lines]
-git = "https://github.com/nicopap/bevy_debug_lines"
-branch = "bevy-main"
-version = "0.4"
+version = "0.6"
 optional = true
 
 [dev-dependencies]
