@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## Unreleased
+
+* `bevy` 0.7
+
 ## 0.2.0
 
 - Bevy 0.6
