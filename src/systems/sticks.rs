@@ -24,17 +24,26 @@ pub fn update_sticks(
                         continue;
                     }
                 };
-            if a_locked.is_some() && b_locked.is_some() {
+            let (a_locked, b_locked) = (a_locked.is_some(), b_locked.is_some());
+            if a_locked && b_locked {
                 continue;
             }
             let (coords_a, coords_b) = (transform_a.translation, transform_b.translation);
             let center: Vec3 = (coords_a + coords_b) / 2.;
-            let direction: Vec3 = (coords_a - coords_b).normalize() * stick.length / 2.;
-            if a_locked.is_none() {
-                transform_a.translation = center + direction;
+            let direction: Vec3 = (coords_a - coords_b).normalize() * stick.length / 2.0;
+            if !a_locked {
+                transform_a.translation = if b_locked {
+                    transform_b.translation + direction * 2.0
+                } else {
+                    center + direction
+                };
             }
-            if b_locked.is_none() {
-                transform_b.translation = center - direction;
+            if !b_locked {
+                transform_b.translation = if a_locked {
+                    transform_a.translation - direction * 2.0
+                } else {
+                    center - direction
+                };
             }
         }
     }

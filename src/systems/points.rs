@@ -24,7 +24,7 @@ pub fn update_points(
         VerletTimeStep::DeltaTime => time.delta_seconds(),
         VerletTimeStep::FixedDeltaTime(dt) => *dt as f32,
     };
-    let gravity = config.gravity * delta_time;
+    let gravity = config.gravity * delta_time * delta_time;
     let friction = config.friction_coefficient();
     if let Some(batch_size) = config.parallel_processing_batch_size {
         points_query.par_for_each_mut(&pool, batch_size, |(mut transform, mut point)| {
