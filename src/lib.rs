@@ -36,7 +36,7 @@
     clippy::nursery,
     clippy::pedantic,
     nonstandard_style,
-    rustdoc::broken_intra_links
+    rustdoc::broken_intra_doc_links
 )]
 #![allow(
     clippy::default_trait_access,
