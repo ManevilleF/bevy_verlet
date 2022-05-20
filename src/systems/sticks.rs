@@ -3,18 +3,6 @@ use crate::{VerletConfig, VerletStickMaxTension};
 use bevy::log;
 use bevy::prelude::*;
 
-macro_rules! get_point {
-    ($res:expr) => {
-        match $res {
-            Ok((p, locked)) => (p.translation, locked.is_some()),
-            Err(e) => {
-                log::error!("Could not find point entity for stick: {}", e);
-                continue;
-            }
-        }
-    };
-}
-
 #[allow(
     clippy::type_complexity,
     clippy::needless_pass_by_value,
@@ -23,30 +11,39 @@ macro_rules! get_point {
 pub fn update_sticks(
     config: Option<Res<VerletConfig>>,
     sticks_query: Query<&VerletStick>,
-    mut points_query: QuerySet<(
-        QueryState<(&Transform, Option<&VerletLocked>), With<VerletPoint>>,
-        QueryState<&mut Transform, With<VerletPoint>>,
-    )>,
+    mut points_query: Query<(&mut Transform, Option<&VerletLocked>), With<VerletPoint>>,
 ) {
     let config = config.map(|g| *g).unwrap_or_default();
     for _ in 0..=config.sticks_computation_depth {
         for stick in sticks_query.iter() {
-            let (coords_a, a_locked) = get_point!(points_query.q0().get(stick.point_a_entity));
-            let (coords_b, b_locked) = get_point!(points_query.q0().get(stick.point_b_entity));
-
+            let [(mut transform_a, a_locked), (mut transform_b, b_locked)] =
+                match points_query.get_many_mut([stick.point_a_entity, stick.point_b_entity]) {
+                    Ok(v) => v,
+                    Err(e) => {
+                        log::error!("Could not find point entity for stick: {}", e);
+                        continue;
+                    }
+                };
+            let (a_locked, b_locked) = (a_locked.is_some(), b_locked.is_some());
             if a_locked && b_locked {
                 continue;
             }
+            let (coords_a, coords_b) = (transform_a.translation, transform_b.translation);
             let center: Vec3 = (coords_a + coords_b) / 2.;
-            let direction: Vec3 = (coords_a - coords_b).normalize();
-            let mut q1 = points_query.q1();
+            let direction: Vec3 = (coords_a - coords_b).normalize() * stick.length / 2.0;
             if !a_locked {
-                let mut point_a_transform = q1.get_mut(stick.point_a_entity).unwrap();
-                point_a_transform.translation = center + direction * stick.length / 2.;
+                transform_a.translation = if b_locked {
+                    transform_b.translation + direction * 2.0
+                } else {
+                    center + direction
+                };
             }
             if !b_locked {
-                let mut point_b_transform = q1.get_mut(stick.point_b_entity).unwrap();
-                point_b_transform.translation = center - direction * stick.length / 2.;
+                transform_b.translation = if a_locked {
+                    transform_a.translation - direction * 2.0
+                } else {
+                    center - direction
+                };
             }
         }
     }

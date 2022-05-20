@@ -10,6 +10,8 @@
 //!
 //! Simple Verlet points and sticks implementation for bevy.
 //!
+//! If you are looking for cloth physics, please check [`bevy_silk`](https://github.com/ManevilleF/bevy_silk) instead,
+//!
 //! ## Features
 //!
 //! You can simply add a `VerletPoint` component on any entity with a `Transform` and the verlet physics will apply.
@@ -34,7 +36,7 @@
     clippy::nursery,
     clippy::pedantic,
     nonstandard_style,
-    rustdoc::broken_intra_links
+    rustdoc::broken_intra_doc_links
 )]
 #![allow(
     clippy::default_trait_access,

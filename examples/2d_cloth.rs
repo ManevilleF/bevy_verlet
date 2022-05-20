@@ -46,11 +46,7 @@ fn setup(mut commands: Commands) {
     }
     for (i, entity) in entities.iter().enumerate() {
         let above = i.checked_sub(points_x_count);
-        let left = if i % points_x_count == 0 {
-            None
-        } else {
-            Some(i - 1)
-        };
+        let left = (i % points_x_count == 0).then(|| i - 1);
         spawn_stick(&mut commands, *entity, &entities, stick_length, above);
         spawn_stick(&mut commands, *entity, &entities, stick_length, left);
     }

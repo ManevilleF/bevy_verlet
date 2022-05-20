@@ -19,17 +19,17 @@ debug = ["bevy_prototype_debug_lines"]
 [dependencies]
 
 [dependencies.bevy]
-version = "0.6"
+version = "0.7"
 default-features = false
 
 [dependencies.bevy_prototype_debug_lines]
-version = "0.6"
+version = "0.7"
 optional = true
 
 [dev-dependencies]
 
 [dev-dependencies.bevy]
-version = "0.6"
+version = "0.7"
 features = ["render", "bevy_winit", "x11"]
 default-features = false
 
@@ -52,3 +52,11 @@ required-features = ["debug"]
 [[example]]
 name = "3d_line"
 required-features = ["debug"]
+
+# Enable only a small amount of optimization in debug mode
+[profile.dev]
+opt-level = 1
+
+# Enable high optimizations for dependencies (incl. Bevy), but not for our code:
+[profile.dev.package."*"]
+opt-level = 3
