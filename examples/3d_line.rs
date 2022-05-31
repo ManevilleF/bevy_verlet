@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy_verlet::{BevyVerletPlugin, VerletConfig, VerletLocked, VerletPoint, VerletStick};
+use bevy_verlet::{VerletConfig, VerletLocked, VerletPlugin, VerletPoint, VerletStick};
 
 fn main() {
     App::new()
@@ -10,7 +10,7 @@ fn main() {
             ..Default::default()
         })
         .add_plugins(DefaultPlugins)
-        .add_plugin(BevyVerletPlugin::default())
+        .add_plugin(VerletPlugin::default())
         .add_startup_system(setup_camera)
         .add_startup_system(setup_free_line)
         .add_startup_system(setup_fixed_line)

@@ -5,7 +5,7 @@ use bevy::math::{Vec2, Vec3, Vec3Swizzles};
 pub struct VerletConfig {
     /// Custom gravity, classic (0, -9.81, 0) is used by default
     pub gravity: Vec3,
-    /// Custom friction to apply to velocity, 0.01 by default
+    /// Custom friction to apply to velocity, slowing down the simulation and reducing elasticity.
     ///
     /// Note: will be clamped between 0.0 and 1.0
     pub friction: f32,

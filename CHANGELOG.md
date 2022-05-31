@@ -3,6 +3,9 @@
 ## Unreleased
 
 * `bevy` 0.7
+* Fixed extra elasticity issue around fixed points
+* (**BREAKING**) Renamed `BevyVerletPlugin` to `VerletPlugin`
+* Improved *cloth cutter* example
 
 ## 0.2.0
 

@@ -17,9 +17,8 @@ pub fn update_points(
     mut points_query: Query<(&mut Transform, &mut VerletPoint), Without<VerletLocked>>,
     pool: Res<ComputeTaskPool>,
     time: Res<Time>,
-    config: Option<Res<VerletConfig>>,
+    config: Res<VerletConfig>,
 ) {
-    let config = config.map(|g| *g).unwrap_or_default();
     let delta_time = match &*time_step {
         VerletTimeStep::DeltaTime => time.delta_seconds(),
         VerletTimeStep::FixedDeltaTime(dt) => *dt as f32,

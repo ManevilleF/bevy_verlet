@@ -58,21 +58,22 @@ use bevy::prelude::*;
 use bevy_prototype_debug_lines::DebugLinesPlugin;
 
 /// Plugin for Verlet physics
-pub struct BevyVerletPlugin {
+pub struct VerletPlugin {
     /// Custom time step for verlet physics, if set to `None` physics will run every frame
     pub time_step: Option<f64>,
 }
 
-impl Plugin for BevyVerletPlugin {
+impl Plugin for VerletPlugin {
     fn build(&self, app: &mut App) {
+        app.init_resource::<VerletConfig>();
         let system_set = SystemSet::new()
+            .with_system(systems::points::update_points.label("VERLET_UPDATE_POINTS"))
             .with_system(
-                systems::points::update_points
-                    .label("points")
-                    .after("sticks"),
+                systems::sticks::update_sticks
+                    .label("VERLET_UPDATE_STICKS")
+                    .after("VERLET_UPDATE_POINTS"),
             )
-            .with_system(systems::sticks::update_sticks.label("sticks"))
-            .with_system(systems::sticks::handle_stick_constraints.after("sticks"));
+            .with_system(systems::sticks::handle_stick_constraints.after("VERLET_UPDATE_STICKS"));
         let system_set = if let Some(step) = self.time_step {
             app.insert_resource(VerletTimeStep::FixedDeltaTime(step));
             system_set.with_run_criteria(FixedTimestep::step(step))
@@ -94,7 +95,7 @@ impl Plugin for BevyVerletPlugin {
     }
 }
 
-impl Default for BevyVerletPlugin {
+impl Default for VerletPlugin {
     fn default() -> Self {
         Self {
             time_step: Some(0.02),
@@ -102,7 +103,7 @@ impl Default for BevyVerletPlugin {
     }
 }
 
-impl BevyVerletPlugin {
+impl VerletPlugin {
     /// Instantiates a new plugin with a custom time step
     #[must_use]
     #[inline]

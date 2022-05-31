@@ -1,3 +1,4 @@
+#![allow(clippy::needless_pass_by_value)]
 use crate::components::{VerletLocked, VerletPoint, VerletStick};
 use crate::{VerletConfig, VerletStickMaxTension};
 use bevy::log;
@@ -9,11 +10,10 @@ use bevy::prelude::*;
     clippy::similar_names
 )]
 pub fn update_sticks(
-    config: Option<Res<VerletConfig>>,
+    config: Res<VerletConfig>,
     sticks_query: Query<&VerletStick>,
     mut points_query: Query<(&mut Transform, Option<&VerletLocked>), With<VerletPoint>>,
 ) {
-    let config = config.map(|g| *g).unwrap_or_default();
     for _ in 0..=config.sticks_computation_depth {
         for stick in sticks_query.iter() {
             let [(mut transform_a, a_locked), (mut transform_b, b_locked)] =
@@ -77,7 +77,6 @@ fn handle_stick_constraint(
     }
 }
 
-#[allow(clippy::needless_pass_by_value)]
 pub fn handle_stick_constraints(
     mut commands: Commands,
     sticks_query: Query<(Entity, &VerletStick, &VerletStickMaxTension)>,

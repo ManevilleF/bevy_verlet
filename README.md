@@ -53,9 +53,7 @@ This feature will add a *system* drawing debug lines for every stick using [`bev
 
 4. 2D cloth cutting
 
-   `cargo run --example 2d_cloth_cutter --features "debug" --release`
-   
-   > Note: the release flag is necessary for smooth running
+   `cargo run --example 2d_cloth_cutter --features "debug"
    
    ![Alt](./docs/demo_cloth_cutting.gif "demo gif")
 

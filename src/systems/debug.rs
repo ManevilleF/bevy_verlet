@@ -17,7 +17,7 @@ macro_rules! get_point_debug {
 
 fn draw_stick(
     stick: &VerletStick,
-    points_query: &Query<&Transform, With<VerletPoint>>,
+    points_query: &Query<&GlobalTransform, With<VerletPoint>>,
 ) -> Option<(Vec3, Vec3)> {
     let transform_a = get_point_debug!(points_query.get(stick.point_a_entity));
     let transform_b = get_point_debug!(points_query.get(stick.point_b_entity));
@@ -28,7 +28,7 @@ fn draw_stick(
 pub fn debug_draw_sticks(
     mut lines: ResMut<DebugLines>,
     sticks_query: Query<&VerletStick>,
-    points_query: Query<&Transform, With<VerletPoint>>,
+    points_query: Query<&GlobalTransform, With<VerletPoint>>,
 ) {
     for stick in sticks_query.iter() {
         if let Some((a, b)) = draw_stick(stick, &points_query) {

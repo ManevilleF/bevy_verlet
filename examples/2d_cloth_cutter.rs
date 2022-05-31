@@ -1,6 +1,6 @@
 use bevy::prelude::*;
 use bevy_verlet::{
-    BevyVerletPlugin, VerletConfig, VerletLocked, VerletPoint, VerletStick, VerletStickMaxTension,
+    VerletConfig, VerletLocked, VerletPlugin, VerletPoint, VerletStick, VerletStickMaxTension,
 };
 
 fn main() {
@@ -17,7 +17,11 @@ fn main() {
             ..Default::default()
         })
         .add_plugins(DefaultPlugins)
-        .add_plugin(BevyVerletPlugin::default())
+        .add_plugin(VerletPlugin::default())
+        .insert_resource(VerletConfig {
+            parallel_processing_batch_size: Some(500),
+            ..Default::default()
+        })
         .add_startup_system(setup)
         .add_system(cut_sticks)
         .run();
@@ -98,7 +102,7 @@ fn cut_sticks(
         None => return,
         Some(p) => mouse_coords(window, p),
     };
-    let l = 15.;
+    let l = 20.;
     for (entity, stick) in sticks.iter() {
         let point_a = points.get(stick.point_a_entity).unwrap();
         let point_b = points.get(stick.point_b_entity).unwrap();
