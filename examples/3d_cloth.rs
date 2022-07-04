@@ -60,7 +60,7 @@ fn setup(
         let left = if i % points_x_count == 0 {
             None
         } else {
-            Some(i - 1)
+            i.checked_sub(1)
         };
         spawn_stick(&mut commands, *entity, &entities, stick_length, above);
         spawn_stick(&mut commands, *entity, &entities, stick_length, left);

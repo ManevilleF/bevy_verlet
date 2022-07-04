@@ -57,7 +57,14 @@ use bevy::prelude::*;
 #[cfg(feature = "debug")]
 use bevy_prototype_debug_lines::DebugLinesPlugin;
 
+/// Prelude
+pub mod prelude {
+    pub use crate::components::*;
+    pub use crate::resources::*;
+}
+
 /// Plugin for Verlet physics
+#[derive(Debug, Copy, Clone, Default)]
 pub struct VerletPlugin {
     /// Custom time step for verlet physics, if set to `None` physics will run every frame
     pub time_step: Option<f64>,
@@ -92,14 +99,6 @@ impl Plugin for VerletPlugin {
             .register_type::<VerletStick>()
             .register_type::<VerletStickMaxTension>();
         log::info!("Loaded verlet plugin");
-    }
-}
-
-impl Default for VerletPlugin {
-    fn default() -> Self {
-        Self {
-            time_step: Some(0.02),
-        }
     }
 }
 

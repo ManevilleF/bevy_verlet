@@ -1,8 +1,8 @@
 use bevy::prelude::{Component, Entity, Reflect};
 
-/// Constraint component between two [`VerletPoint`][VerletPoint].
+/// Constraint component between two [`VerletPoint`].
 ///
-/// [VerletPoint]: struct.VerletPoint.html
+/// [`VerletPoint`]: crate::VerletPoint
 #[derive(Debug, Clone, Component, Reflect)]
 pub struct VerletStick {
     /// Start `VerletPoint` entity

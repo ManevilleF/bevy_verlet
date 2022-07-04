@@ -13,6 +13,7 @@ pub struct VerletConfig {
     /// The higher the value, the more precision and less elasticity for the sticks but the cost is increased
     pub sticks_computation_depth: u8,
     /// Enables parallel computing for points, setting the parallel batch size
+    // TODO: Once https://github.com/bevyengine/bevy/pull/4777 is merged use automatic batching and make this a custom field
     pub parallel_processing_batch_size: Option<usize>,
 }
 
@@ -20,8 +21,8 @@ impl Default for VerletConfig {
     fn default() -> Self {
         Self {
             gravity: Vec3::new(0., -9.81, 0.),
-            friction: 0.05,
-            sticks_computation_depth: 2,
+            friction: 0.02,
+            sticks_computation_depth: 5,
             parallel_processing_batch_size: None,
         }
     }

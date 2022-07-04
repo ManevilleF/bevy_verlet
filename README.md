@@ -45,13 +45,13 @@ This feature will add a *system* drawing debug lines for every stick using [`bev
 
    ![Alt](./docs/demo_line.gif "demo gif")
 
-3. 2D cloth
+2. 2D cloth
 
    `cargo run --example 2d_cloth --features "debug"`
 
    ![Alt](./docs/demo_cloth.gif "demo gif")
 
-4. 2D cloth cutting
+3. 2D cloth cutting
 
    `cargo run --example 2d_cloth_cutter --features "debug"
    

@@ -52,7 +52,7 @@ pub fn update_sticks(
 fn handle_stick_constraint(
     entity: Entity,
     stick: &VerletStick,
-    max_tension: &VerletStickMaxTension,
+    max_tension: f32,
     points_query: &Query<&Transform, With<VerletPoint>>,
 ) -> Option<Entity> {
     let point_a = match points_query.get(stick.point_a_entity) {
@@ -70,7 +70,7 @@ fn handle_stick_constraint(
         }
     };
     let distance = point_a.translation.distance(point_b.translation);
-    if distance > stick.length * max_tension.0 {
+    if distance > stick.length * max_tension {
         Some(entity)
     } else {
         None
@@ -83,7 +83,7 @@ pub fn handle_stick_constraints(
     points_query: Query<&Transform, With<VerletPoint>>,
 ) {
     for (entity, stick, max_tension) in sticks_query.iter() {
-        if let Some(entity) = handle_stick_constraint(entity, stick, max_tension, &points_query) {
+        if let Some(entity) = handle_stick_constraint(entity, stick, **max_tension, &points_query) {
             commands.entity(entity).despawn_recursive();
         }
     }

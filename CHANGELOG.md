@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+* Fixed examples in debug mode
+* Added `prelude` module
+* docs update
 * `bevy` 0.7
 * Fixed extra elasticity issue around fixed points
 * (**BREAKING**) Renamed `BevyVerletPlugin` to `VerletPlugin`

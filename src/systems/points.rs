@@ -4,10 +4,15 @@ use crate::resources::VerletConfig;
 use bevy::prelude::*;
 use bevy::tasks::ComputeTaskPool;
 
-fn update_point(transform: &mut Transform, point: &mut VerletPoint, gravity: Vec3, friction: f32) {
+fn update_point(
+    transform: &mut Transform,
+    point: &mut VerletPoint,
+    acceleration: Vec3,
+    friction: f32,
+) {
     let position = transform.translation;
     let velocity = point.old_position.map_or(Vec3::ZERO, |pos| position - pos);
-    transform.translation += velocity * friction + gravity;
+    transform.translation += velocity * friction + acceleration;
     point.old_position = Some(position);
 }
 
@@ -21,10 +26,11 @@ pub fn update_points(
 ) {
     let delta_time = match &*time_step {
         VerletTimeStep::DeltaTime => time.delta_seconds(),
-        VerletTimeStep::FixedDeltaTime(dt) => *dt as f32,
+        VerletTimeStep::FixedDeltaTime(dt) => (*dt * *dt) as f32,
     };
     let gravity = config.gravity * delta_time;
     let friction = config.friction_coefficient();
+    // TODO: Once https://github.com/bevyengine/bevy/pull/4777 is merged use automatic batching
     if let Some(batch_size) = config.parallel_processing_batch_size {
         points_query.par_for_each_mut(&pool, batch_size, |(mut transform, mut point)| {
             update_point(&mut transform, &mut point, gravity, friction);

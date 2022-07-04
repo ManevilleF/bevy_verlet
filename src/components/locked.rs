@@ -1,7 +1,7 @@
 use bevy::prelude::{Component, Reflect};
 
-/// Component preventing application of  [`VerletPoint`][VerletPoint] physics.
+/// Marker component preventing application of [`VerletPoint`] physics.
 ///
-/// [VerletPoint]: struct.VerletPoint.html
+/// [`VerletPoint`]: crate::VerletPoint
 #[derive(Debug, Copy, Clone, Component, Reflect)]
 pub struct VerletLocked;

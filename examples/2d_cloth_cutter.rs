@@ -5,11 +5,6 @@ use bevy_verlet::{
 
 fn main() {
     App::new()
-        .insert_resource(VerletConfig {
-            parallel_processing_batch_size: Some(1000),
-            sticks_computation_depth: 2,
-            ..Default::default()
-        })
         .insert_resource(WindowDescriptor {
             title: "2D Cloth cutter".to_string(),
             width: 1400.,
@@ -55,7 +50,7 @@ fn setup(mut commands: Commands) {
         let left = if i % points_x_count == 0 {
             None
         } else {
-            Some(i - 1)
+            i.checked_sub(1)
         };
         spawn_stick(&mut commands, *entity, &entities, stick_length, above);
         spawn_stick(&mut commands, *entity, &entities, stick_length, left);
