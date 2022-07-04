@@ -1,5 +1,5 @@
 use bevy::prelude::*;
-use bevy_verlet::{VerletConfig, VerletLocked, VerletPlugin, VerletPoint, VerletStick};
+use bevy_verlet::prelude::*;
 
 fn main() {
     App::new()

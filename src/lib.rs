@@ -61,6 +61,7 @@ use bevy_prototype_debug_lines::DebugLinesPlugin;
 pub mod prelude {
     pub use crate::components::*;
     pub use crate::resources::*;
+    pub use crate::VerletPlugin;
 }
 
 /// Plugin for Verlet physics
