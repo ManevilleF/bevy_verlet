@@ -8,7 +8,7 @@
 [![unsafe forbidden](https://img.shields.io/badge/unsafe-forbidden-success.svg)](https://github.com/rust-secure-code/safety-dance/)
 [![Crates.io](https://img.shields.io/crates/v/bevy_verlet.svg)](https://crates.io/crates/bevy_verlet)
 [![Docs.rs](https://docs.rs/bevy_verlet/badge.svg)](https://docs.rs/bevy_verlet)
-[![dependency status](https://deps.rs/crate/bevy_verlet/0.2.0/status.svg)](https://deps.rs/crate/bevy_verlet)
+[![dependency status](https://deps.rs/crate/bevy_verlet/0.3.0/status.svg)](https://deps.rs/crate/bevy_verlet)
 
 Simple Verlet points and sticks implementation for bevy.
 

@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## Unreleased
+## 0.3.0
 
 * Fixed examples in debug mode
 * Added `prelude` module
