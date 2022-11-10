@@ -14,6 +14,15 @@ Simple Verlet points and sticks implementation for bevy.
 
 If you are looking for cloth physics, please check [`bevy_silk`](https://github.com/ManevilleF/bevy_silk) instead,
 
+## Bevy versions
+
+ | `bevy_verlet`   | `bevy`    |
+ |---------------|-----------|
+ | 0.1.x         | 0.5.x     |
+ | 0.2.x         | 0.6.x     |
+ | 0.3.x         | 0.7.x     |
+ | 0.4.x         | 0.8.x     |
+
 ## Features
 
 You can simply add a `VerletPoint` component on any entity with a `Transform` and the verlet physics will apply.

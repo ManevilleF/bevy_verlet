@@ -16,7 +16,7 @@ fn main() {
 }
 
 fn setup(mut commands: Commands) {
-    commands.spawn_bundle(OrthographicCameraBundle::new_2d());
+    commands.spawn_bundle(Camera2dBundle::default());
     let stick_length: f32 = 35.;
     let (origin_x, origin_y) = (-450., 350.);
     let (points_x_count, points_y_count) = (30, 15);
