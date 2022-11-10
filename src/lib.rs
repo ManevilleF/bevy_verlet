@@ -12,6 +12,15 @@
 //!
 //! If you are looking for cloth physics, please check [`bevy_silk`](https://github.com/ManevilleF/bevy_silk) instead,
 //!
+//! ## Bevy versions
+//!
+//!  | `bevy_verlet`   | `bevy`    |
+//!  |---------------|-----------|
+//!  | 0.1.x         | 0.5.x     |
+//!  | 0.2.x         | 0.6.x     |
+//!  | 0.3.x         | 0.7.x     |
+//!  | 0.4.x         | 0.8.x     |
+//!
 //! ## Features
 //!
 //! You can simply add a `VerletPoint` component on any entity with a `Transform` and the verlet physics will apply.
@@ -51,9 +60,9 @@ mod resources;
 mod systems;
 
 use crate::verlet_time_step::VerletTimeStep;
-use bevy::core::FixedTimestep;
 use bevy::log;
 use bevy::prelude::*;
+use bevy::time::FixedTimestep;
 #[cfg(feature = "debug")]
 use bevy_prototype_debug_lines::DebugLinesPlugin;
 

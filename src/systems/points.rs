@@ -2,7 +2,6 @@ use crate::components::{VerletLocked, VerletPoint};
 use crate::resources::verlet_time_step::VerletTimeStep;
 use crate::resources::VerletConfig;
 use bevy::prelude::*;
-use bevy::tasks::ComputeTaskPool;
 
 fn update_point(
     transform: &mut Transform,
@@ -20,7 +19,6 @@ fn update_point(
 pub fn update_points(
     time_step: Res<VerletTimeStep>,
     mut points_query: Query<(&mut Transform, &mut VerletPoint), Without<VerletLocked>>,
-    pool: Res<ComputeTaskPool>,
     time: Res<Time>,
     config: Res<VerletConfig>,
 ) {
@@ -32,7 +30,7 @@ pub fn update_points(
     let friction = config.friction_coefficient();
     // TODO: Once https://github.com/bevyengine/bevy/pull/4777 is merged use automatic batching
     if let Some(batch_size) = config.parallel_processing_batch_size {
-        points_query.par_for_each_mut(&pool, batch_size, |(mut transform, mut point)| {
+        points_query.par_for_each_mut(batch_size, |(mut transform, mut point)| {
             update_point(&mut transform, &mut point, gravity, friction);
         });
     } else {
