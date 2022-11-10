@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## 0.4.0
+
+* `bevy` 0.8
+
 ## 0.3.0
 
 * Fixed examples in debug mode
