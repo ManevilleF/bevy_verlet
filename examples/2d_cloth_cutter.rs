@@ -21,22 +21,22 @@ fn main() {
 }
 
 fn setup(mut commands: Commands) {
-    commands.spawn_bundle(Camera2dBundle::default());
+    commands.spawn(Camera2dBundle::default());
     let stick_length: f32 = 11.;
     let (origin_x, origin_y) = (-600., 420.);
     let (points_x_count, points_y_count) = (121, 60);
     let mut entities = Vec::new();
     for j in 0..points_y_count {
         for i in 0..points_x_count {
-            let mut cmd = commands.spawn();
-            cmd.insert(Transform::from_xyz(
-                origin_x + (10. * i as f32),
-                origin_y + (-10. * j as f32),
-                0.,
-            ))
-            .insert(GlobalTransform::default())
-            .insert(VerletPoint::default())
-            .insert(Name::new(format!("Point {}", i)));
+            let mut cmd = commands.spawn((
+                TransformBundle::from_transform(Transform::from_xyz(
+                    origin_x + (10. * i as f32),
+                    origin_y + (-10. * j as f32),
+                    0.,
+                )),
+                VerletPoint::default(),
+                Name::new(format!("Point {}", i)),
+            ));
             if j == 0 && i % 2 == 0 {
                 cmd.insert(VerletLocked);
             }
@@ -64,14 +64,14 @@ fn spawn_stick(
 ) {
     if let Some(i) = coord {
         let other_entity = entities.get(i).unwrap();
-        commands
-            .spawn()
-            .insert(VerletStick {
+        commands.spawn((
+            VerletStick {
                 point_a_entity: entity,
                 point_b_entity: *other_entity,
                 length,
-            })
-            .insert(VerletStickMaxTension(5.));
+            },
+            VerletStickMaxTension(5.),
+        ));
     }
 }
 

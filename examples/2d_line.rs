@@ -26,23 +26,24 @@ fn setup_free_line(mut commands: Commands) {
     let points_count = 10;
     let mut previous_entity = None;
     for i in 0..=points_count {
-        let mut cmd =
-            commands.spawn_bundle(sprite_bundle(Color::WHITE, Vec2::new(50. * i as f32, 300.)));
-        cmd.insert(VerletPoint::default())
-            .insert(Name::new(format!("Point {}", i)));
+        let mut cmd = commands.spawn((
+            sprite_bundle(Color::WHITE, Vec2::new(50. * i as f32, 300.)),
+            VerletPoint::default(),
+            Name::new(format!("Point {}", i)),
+        ));
         if previous_entity.is_none() {
             cmd.insert(VerletLocked);
         }
         let entity = cmd.id();
         if let Some(e) = previous_entity {
-            commands
-                .spawn()
-                .insert(VerletStick {
+            commands.spawn(
+                VerletStick {
                     point_a_entity: e,
                     point_b_entity: entity,
                     length: stick_length,
-                })
-                .insert(Name::new(format!("Stick {}", i)));
+                },
+                Name::new(format!("Stick {}", i)),
+            );
         }
         previous_entity = Some(entity);
     }
@@ -54,25 +55,24 @@ fn setup_fixed_line(mut commands: Commands) {
     let start_pos = -450.;
     let mut previous_entity = None;
     for i in 0..=points_count {
-        let mut cmd = commands.spawn_bundle(sprite_bundle(
-            Color::WHITE,
-            Vec2::new(start_pos + 30. * i as f32, 0.),
+        let mut cmd = commands.spawn((
+            sprite_bundle(Color::WHITE, Vec2::new(start_pos + 30. * i as f32, 0.)),
+            VerletPoint::default(),
+            Name::new(format!("Point {}", i)),
         ));
-        cmd.insert(VerletPoint::default())
-            .insert(Name::new(format!("Point {}", i)));
         if previous_entity.is_none() || i == points_count {
             cmd.insert(VerletLocked);
         }
         let entity = cmd.id();
         if let Some(e) = previous_entity {
-            commands
-                .spawn()
-                .insert(VerletStick {
+            commands.spawn((
+                VerletStick {
                     point_a_entity: e,
                     point_b_entity: entity,
                     length: stick_length,
-                })
-                .insert(Name::new(format!("Stick {}", i)));
+                },
+                Name::new(format!("Stick {}", i)),
+            ));
         }
         previous_entity = Some(entity);
     }

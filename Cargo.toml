@@ -19,7 +19,7 @@ debug = ["bevy_prototype_debug_lines"]
 [dependencies]
 
 [dependencies.bevy]
-version = "0.8"
+version = "0.9"
 default-features = false
 
 [dependencies.bevy_prototype_debug_lines]
@@ -29,7 +29,7 @@ optional = true
 [dev-dependencies]
 
 [dev-dependencies.bevy]
-version = "0.8"
+version = "0.9"
 features = ["render", "bevy_winit", "x11"]
 default-features = false
 
