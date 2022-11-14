@@ -20,7 +20,7 @@ fn main() {
 }
 
 fn setup_camera(mut commands: Commands) {
-    commands.spawn_bundle(Camera2dBundle::default());
+    commands.spawn(Camera2dBundle::default());
 }
 
 fn setup_free_line(mut commands: Commands) {
@@ -38,14 +38,14 @@ fn setup_free_line(mut commands: Commands) {
         }
         let entity = cmd.id();
         if let Some(e) = previous_entity {
-            commands.spawn(
+            commands.spawn((
                 VerletStick {
                     point_a_entity: e,
                     point_b_entity: entity,
                     length: stick_length,
                 },
                 Name::new(format!("Stick {}", i)),
-            );
+            ));
         }
         previous_entity = Some(entity);
     }

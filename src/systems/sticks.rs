@@ -85,23 +85,26 @@ pub fn handle_stick_constraints(
     config: Res<VerletConfig>,
 ) {
     // TODO: Once https://github.com/bevyengine/bevy/pull/4777 is merged use automatic batching
-    if let Some(batch_size) = config.parallel_processing_batch_size {
-        sticks_query.par_for_each(batch_size, |(entity, stick, max_tension)| {
-            if let Some(entity) =
-                handle_stick_constraint(entity, stick, **max_tension, &points_query)
-            {
-                par_commands.command_scope(|mut cmd| {
-                    cmd.entity(entity).despawn_recursive();
-                });
+    config.parallel_processing_batch_size.map_or_else(
+        || {
+            for (entity, stick, max_tension) in sticks_query.iter() {
+                if let Some(entity) =
+                    handle_stick_constraint(entity, stick, **max_tension, &points_query)
+                {
+                    commands.entity(entity).despawn_recursive();
+                }
             }
-        });
-    } else {
-        for (entity, stick, max_tension) in sticks_query.iter() {
-            if let Some(entity) =
-                handle_stick_constraint(entity, stick, **max_tension, &points_query)
-            {
-                commands.entity(entity).despawn_recursive();
-            }
-        }
-    }
+        },
+        |batch_size| {
+            sticks_query.par_for_each(batch_size, |(entity, stick, max_tension)| {
+                if let Some(entity) =
+                    handle_stick_constraint(entity, stick, **max_tension, &points_query)
+                {
+                    par_commands.command_scope(|mut cmd| {
+                        cmd.entity(entity).despawn_recursive();
+                    });
+                }
+            });
+        },
+    );
 }
