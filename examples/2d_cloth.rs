@@ -3,13 +3,15 @@ use bevy_verlet::prelude::*;
 
 fn main() {
     App::new()
-        .insert_resource(WindowDescriptor {
-            title: "2D cloth".to_string(),
-            width: 1000.,
-            height: 800.,
-            ..Default::default()
-        })
-        .add_plugins(DefaultPlugins)
+        .add_plugins(DefaultPlugins.set(WindowPlugin {
+            window: WindowDescriptor {
+                title: "2D cloth".to_string(),
+                width: 1000.,
+                height: 800.,
+                ..default()
+            },
+            ..default()
+        }))
         .add_plugin(VerletPlugin::default())
         .add_startup_system(setup)
         .run();

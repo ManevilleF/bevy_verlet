@@ -3,13 +3,15 @@ use bevy_verlet::prelude::*;
 
 fn main() {
     App::new()
-        .insert_resource(WindowDescriptor {
-            title: "2D Cloth cutter".to_string(),
-            width: 1400.,
-            height: 900.,
-            ..Default::default()
-        })
-        .add_plugins(DefaultPlugins)
+        .add_plugins(DefaultPlugins.set(WindowPlugin {
+            window: WindowDescriptor {
+                title: "2D Cloth cutter".to_string(),
+                width: 1400.,
+                height: 900.,
+                ..default()
+            },
+            ..default()
+        }))
         .add_plugin(VerletPlugin::default())
         .insert_resource(VerletConfig {
             parallel_processing_batch_size: Some(500),
