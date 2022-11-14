@@ -3,13 +3,15 @@ use bevy_verlet::prelude::*;
 
 fn main() {
     App::new()
-        .insert_resource(WindowDescriptor {
-            title: "3D cloth".to_string(),
-            width: 1000.,
-            height: 800.,
-            ..Default::default()
-        })
-        .add_plugins(DefaultPlugins)
+        .add_plugins(DefaultPlugins.set(WindowPlugin {
+            window: WindowDescriptor {
+                title: "3D cloth".to_string(),
+                width: 1000.,
+                height: 800.,
+                ..default()
+            },
+            ..default()
+        }))
         .add_plugin(VerletPlugin::default())
         .add_startup_system(setup)
         .insert_resource(VerletConfig {
@@ -24,7 +26,7 @@ fn setup(
     mut materials: ResMut<Assets<StandardMaterial>>,
     mut meshes: ResMut<Assets<Mesh>>,
 ) {
-    commands.spawn_bundle(Camera3dBundle {
+    commands.spawn(Camera3dBundle {
         transform: Transform::from_xyz(-50., 0., -50.).looking_at(Vec3::ZERO, Vec3::Y),
         ..Default::default()
     });
@@ -37,20 +39,22 @@ fn setup(
     let mut entities = Vec::new();
     for j in 0..points_y_count {
         for i in 0..points_x_count {
-            let mut cmd = commands.spawn_bundle(PbrBundle {
-                mesh: mesh.clone(),
-                material: material.clone(),
-                transform: Transform::from_xyz(
-                    origin_x + (2.0 * i as f32),
-                    origin_y + (2.0 * (j + i / 2) as f32),
-                    0.,
-                ),
-                ..Default::default()
-            });
-            cmd.insert(VerletPoint::default())
-                .insert(Name::new(format!("Point {}", i)));
+            let mut cmd = commands.spawn((
+                PbrBundle {
+                    mesh: mesh.clone(),
+                    material: material.clone(),
+                    transform: Transform::from_xyz(
+                        origin_x + (2.0 * i as f32),
+                        origin_y + (2.0 * (j + i / 2) as f32),
+                        0.,
+                    ),
+                    ..Default::default()
+                },
+                VerletPoint::default(),
+                Name::new(format!("Point {}", i)),
+            ));
             if j == 0 {
-                cmd.insert(VerletLocked).insert(fixed_material.clone());
+                cmd.insert((VerletLocked, fixed_material.clone()));
             }
             entities.push(cmd.id());
         }
@@ -76,7 +80,7 @@ fn spawn_stick(
 ) {
     if let Some(i) = coord {
         let other_entity = entities.get(i).unwrap();
-        commands.spawn().insert(VerletStick {
+        commands.spawn(VerletStick {
             point_a_entity: entity,
             point_b_entity: *other_entity,
             length,

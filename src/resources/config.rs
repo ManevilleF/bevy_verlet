@@ -1,7 +1,8 @@
+use bevy::ecs::prelude::Resource;
 use bevy::math::{Vec2, Vec3, Vec3Swizzles};
 
 /// Verlet physics configuration
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, Resource)]
 pub struct VerletConfig {
     /// Custom gravity, classic (0, -9.81, 0) is used by default
     pub gravity: Vec3,

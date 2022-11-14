@@ -3,13 +3,15 @@ use bevy_verlet::prelude::*;
 
 fn main() {
     App::new()
-        .insert_resource(WindowDescriptor {
-            title: "3D line".to_string(),
-            width: 1000.,
-            height: 800.,
-            ..Default::default()
-        })
-        .add_plugins(DefaultPlugins)
+        .add_plugins(DefaultPlugins.set(WindowPlugin {
+            window: WindowDescriptor {
+                title: "3D line".to_string(),
+                width: 1000.,
+                height: 800.,
+                ..default()
+            },
+            ..default()
+        }))
         .add_plugin(VerletPlugin::default())
         .add_startup_system(setup_camera)
         .add_startup_system(setup_free_line)
@@ -22,7 +24,7 @@ fn main() {
 }
 
 fn setup_camera(mut commands: Commands) {
-    commands.spawn_bundle(Camera3dBundle {
+    commands.spawn(Camera3dBundle {
         transform: Transform::from_xyz(-30., 4., -80.).looking_at(Vec3::ZERO, Vec3::Y),
         ..Default::default()
     });
@@ -40,26 +42,28 @@ fn setup_free_line(
     let points_count = 10;
     let mut previous_entity = None;
     for i in 0..=points_count {
-        let mut cmd = commands.spawn_bundle(pbr_bundle(
-            material.clone(),
-            mesh.clone(),
-            Vec3::new((i * 2) as f32, 20., 0.),
+        let mut cmd = commands.spawn((
+            pbr_bundle(
+                material.clone(),
+                mesh.clone(),
+                Vec3::new((i * 2) as f32, 20., 0.),
+            ),
+            VerletPoint::default(),
+            Name::new(format!("Point {}", i)),
         ));
-        cmd.insert(VerletPoint::default())
-            .insert(Name::new(format!("Point {}", i)));
         if previous_entity.is_none() {
-            cmd.insert(VerletLocked).insert(fixed_material.clone());
+            cmd.insert((VerletLocked, fixed_material.clone()));
         }
         let entity = cmd.id();
         if let Some(e) = previous_entity {
-            commands
-                .spawn()
-                .insert(VerletStick {
+            commands.spawn((
+                VerletStick {
                     point_a_entity: e,
                     point_b_entity: entity,
                     length: stick_length,
-                })
-                .insert(Name::new(format!("Stick {}", i)));
+                },
+                Name::new(format!("Stick {}", i)),
+            ));
         }
         previous_entity = Some(entity);
     }
@@ -78,26 +82,28 @@ fn setup_fixed_line(
     let start_pos = -10.;
     let mut previous_entity = None;
     for i in 0..=points_count {
-        let mut cmd = commands.spawn_bundle(pbr_bundle(
-            material.clone(),
-            mesh.clone(),
-            Vec3::new(start_pos + (i * 2) as f32, 0., 0.),
+        let mut cmd = commands.spawn((
+            pbr_bundle(
+                material.clone(),
+                mesh.clone(),
+                Vec3::new(start_pos + (i * 2) as f32, 0., 0.),
+            ),
+            VerletPoint::default(),
+            Name::new(format!("Point {}", i)),
         ));
-        cmd.insert(VerletPoint::default())
-            .insert(Name::new(format!("Point {}", i)));
         if previous_entity.is_none() || i == points_count {
-            cmd.insert(VerletLocked).insert(fixed_material.clone());
+            cmd.insert((VerletLocked, fixed_material.clone()));
         }
         let entity = cmd.id();
         if let Some(e) = previous_entity {
-            commands
-                .spawn()
-                .insert(VerletStick {
+            commands.spawn((
+                VerletStick {
                     point_a_entity: e,
                     point_b_entity: entity,
                     length: stick_length,
-                })
-                .insert(Name::new(format!("Stick {}", i)));
+                },
+                Name::new(format!("Stick {}", i)),
+            ));
         }
         previous_entity = Some(entity);
     }

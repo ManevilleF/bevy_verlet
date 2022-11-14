@@ -79,12 +79,32 @@ fn handle_stick_constraint(
 
 pub fn handle_stick_constraints(
     mut commands: Commands,
+    par_commands: ParallelCommands,
     sticks_query: Query<(Entity, &VerletStick, &VerletStickMaxTension)>,
     points_query: Query<&Transform, With<VerletPoint>>,
+    config: Res<VerletConfig>,
 ) {
-    for (entity, stick, max_tension) in sticks_query.iter() {
-        if let Some(entity) = handle_stick_constraint(entity, stick, **max_tension, &points_query) {
-            commands.entity(entity).despawn_recursive();
-        }
-    }
+    // TODO: Once https://github.com/bevyengine/bevy/pull/4777 is merged use automatic batching
+    config.parallel_processing_batch_size.map_or_else(
+        || {
+            for (entity, stick, max_tension) in sticks_query.iter() {
+                if let Some(entity) =
+                    handle_stick_constraint(entity, stick, **max_tension, &points_query)
+                {
+                    commands.entity(entity).despawn_recursive();
+                }
+            }
+        },
+        |batch_size| {
+            sticks_query.par_for_each(batch_size, |(entity, stick, max_tension)| {
+                if let Some(entity) =
+                    handle_stick_constraint(entity, stick, **max_tension, &points_query)
+                {
+                    par_commands.command_scope(|mut cmd| {
+                        cmd.entity(entity).despawn_recursive();
+                    });
+                }
+            });
+        },
+    );
 }
