@@ -4,12 +4,11 @@ use bevy_verlet::prelude::*;
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins.set(WindowPlugin {
-            window: WindowDescriptor {
+            primary_window: Some(Window {
                 title: "2D line".to_string(),
-                width: 1000.,
-                height: 800.,
-                ..default()
-            },
+                resolution: (1000., 800.).into(),
+                ..default(),
+            }),
             ..default()
         }))
         .add_plugin(VerletPlugin::default())

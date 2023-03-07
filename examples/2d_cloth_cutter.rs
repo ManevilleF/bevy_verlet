@@ -4,19 +4,13 @@ use bevy_verlet::prelude::*;
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins.set(WindowPlugin {
-            window: WindowDescriptor {
+            primary_window: Some(Window {
                 title: "2D Cloth cutter".to_string(),
-                width: 1400.,
-                height: 900.,
-                ..default()
-            },
+                resolution: (1400., 900.).into()..default(),
+            }),
             ..default()
         }))
         .add_plugin(VerletPlugin::default())
-        .insert_resource(VerletConfig {
-            parallel_processing_batch_size: Some(500),
-            ..Default::default()
-        })
         .add_startup_system(setup)
         .add_system(cut_sticks)
         .run();

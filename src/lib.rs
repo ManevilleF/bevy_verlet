@@ -40,7 +40,7 @@
 //!
 //! This feature will add a *system* drawing debug lines for every stick using [`bevy_prototype_debug_lines`](https://crates.io/crates/bevy_prototype_debug_lines)
 //!
-#![forbid(missing_docs)]
+#![warn(missing_docs)]
 #![forbid(unsafe_code)]
 #![warn(
     clippy::nursery,
@@ -63,9 +63,11 @@ mod systems;
 use crate::verlet_time_step::VerletTimeStep;
 use bevy::log;
 use bevy::prelude::*;
-use bevy::time::FixedTimestep;
+use bevy::time::common_conditions::on_fixed_timer;
 #[cfg(feature = "debug")]
 use bevy_prototype_debug_lines::DebugLinesPlugin;
+use std::time::Duration;
+use systems::{points::*, sticks::*};
 
 /// Prelude
 pub mod prelude {
@@ -73,33 +75,35 @@ pub mod prelude {
     pub use crate::resources::*;
     pub use crate::VerletPlugin;
 }
+#[derive(SystemSet, Debug, Hash, PartialEq, Eq, Clone)]
+pub enum VerletSets {
+    Update,
+}
 
 /// Plugin for Verlet physics
 #[derive(Debug, Copy, Clone, Default)]
 pub struct VerletPlugin {
-    /// Custom time step for verlet physics, if set to `None` physics will run every frame
+    /// Custom time step in seconds for verlet physics, if set to `None` physics will run every frame
     pub time_step: Option<f64>,
 }
 
 impl Plugin for VerletPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<VerletConfig>();
-        let system_set = SystemSet::new()
-            .with_system(systems::points::update_points.label("VERLET_UPDATE_POINTS"))
-            .with_system(
-                systems::sticks::update_sticks
-                    .label("VERLET_UPDATE_STICKS")
-                    .after("VERLET_UPDATE_POINTS"),
-            )
-            .with_system(systems::sticks::handle_stick_constraints.after("VERLET_UPDATE_STICKS"));
-        let system_set = if let Some(step) = self.time_step {
+        app.add_systems(
+            (update_points, update_sticks, handle_stick_constraints)
+                .chain()
+                .in_set(VerletSets::Update),
+        );
+        if let Some(step) = self.time_step {
             app.insert_resource(VerletTimeStep::FixedDeltaTime(step));
-            system_set.with_run_criteria(FixedTimestep::step(step))
+            app.configure_set(
+                // TODO: Add `in_schedule(CoreSchedule::FixedUpdate)` ?
+                VerletSets::Update.run_if(on_fixed_timer(Duration::from_secs_f64(step))),
+            );
         } else {
             app.insert_resource(VerletTimeStep::DeltaTime);
-            system_set
         };
-        app.add_system_set(system_set);
         #[cfg(feature = "debug")]
         {
             app.add_plugin(DebugLinesPlugin::default());
