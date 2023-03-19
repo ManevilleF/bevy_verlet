@@ -1,13 +1,3 @@
-//! # Verlet Integration for Bevy
-//!
-//! [![workflow](https://github.com/ManevilleF/bevy_verlet/actions/workflows/rust.yml/badge.svg)](https://github.com/ManevilleF/bevy_verlet/actions/workflows/rust.yml)
-//!
-//! [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
-//! [![unsafe forbidden](https://img.shields.io/badge/unsafe-forbidden-success.svg)](https://github.com/rust-secure-code/safety-dance/)
-//! [![Crates.io](https://img.shields.io/crates/v/bevy_verlet.svg)](https://crates.io/crates/bevy_verlet)
-//! [![Docs.rs](https://docs.rs/bevy_verlet/badge.svg)](https://docs.rs/bevy_verlet)
-//! [![dependency status](https://deps.rs/crate/bevy_verlet/0.5.0/status.svg)](https://deps.rs/crate/bevy_verlet)
-//!
 //! Simple Verlet points and sticks implementation for bevy.
 //!
 //! If you are looking for cloth physics, please check [`bevy_silk`](https://github.com/ManevilleF/bevy_silk) instead,
@@ -21,6 +11,7 @@
 //!  | 0.3.x         | 0.7.x     |
 //!  | 0.4.x         | 0.8.x     |
 //!  | 0.5.x         | 0.9.x     |
+//!  | 0.6.x         | 0.10.x    |
 //!
 //! ## Features
 //!
@@ -63,7 +54,7 @@ mod systems;
 use crate::verlet_time_step::VerletTimeStep;
 use bevy::log;
 use bevy::prelude::*;
-use bevy::time::common_conditions::on_fixed_timer;
+use bevy::time::common_conditions::on_timer;
 #[cfg(feature = "debug")]
 use bevy_prototype_debug_lines::DebugLinesPlugin;
 use std::time::Duration;
@@ -75,8 +66,9 @@ pub mod prelude {
     pub use crate::resources::*;
     pub use crate::VerletPlugin;
 }
+
 #[derive(SystemSet, Debug, Hash, PartialEq, Eq, Clone)]
-pub enum VerletSets {
+enum VerletSets {
     Update,
 }
 
@@ -99,7 +91,7 @@ impl Plugin for VerletPlugin {
             app.insert_resource(VerletTimeStep::FixedDeltaTime(step));
             app.configure_set(
                 // TODO: Add `in_schedule(CoreSchedule::FixedUpdate)` ?
-                VerletSets::Update.run_if(on_fixed_timer(Duration::from_secs_f64(step))),
+                VerletSets::Update.run_if(on_timer(Duration::from_secs_f64(step))),
             );
         } else {
             app.insert_resource(VerletTimeStep::DeltaTime);
@@ -107,7 +99,7 @@ impl Plugin for VerletPlugin {
         #[cfg(feature = "debug")]
         {
             app.add_plugin(DebugLinesPlugin::default());
-            app.add_system(systems::debug::debug_draw_sticks);
+            app.add_system(systems::debug::debug_draw_sticks.before(VerletSets::Update));
         }
         app.register_type::<VerletPoint>()
             .register_type::<VerletLocked>()

@@ -1,4 +1,4 @@
-use bevy::prelude::*;
+use bevy::{prelude::*, window::PrimaryWindow};
 use bevy_verlet::prelude::*;
 
 fn main() {
@@ -6,7 +6,8 @@ fn main() {
         .add_plugins(DefaultPlugins.set(WindowPlugin {
             primary_window: Some(Window {
                 title: "2D Cloth cutter".to_string(),
-                resolution: (1400., 900.).into()..default(),
+                resolution: (1400., 900.).into(),
+                ..default()
             }),
             ..default()
         }))
@@ -81,12 +82,12 @@ fn cut_sticks(
     points: Query<&Transform, With<VerletPoint>>,
     sticks: Query<(Entity, &VerletStick)>,
     mouse_input: Res<Input<MouseButton>>,
-    windows: Res<Windows>,
+    windows: Query<&Window, With<PrimaryWindow>>,
 ) {
     if !mouse_input.pressed(MouseButton::Left) {
         return;
     }
-    let window = windows.get_primary().unwrap();
+    let window = windows.single();
     let p = match window.cursor_position() {
         None => return,
         Some(p) => mouse_coords(window, p),

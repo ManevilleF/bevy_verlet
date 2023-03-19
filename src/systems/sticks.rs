@@ -20,7 +20,7 @@ pub fn update_sticks(
                 match points_query.get_many_mut([stick.point_a_entity, stick.point_b_entity]) {
                     Ok(v) => v,
                     Err(e) => {
-                        log::error!("Could not find point entity for stick: {}", e);
+                        log::error!("Could not find point entities for stick: {}", e);
                         continue;
                     }
                 };

@@ -23,7 +23,7 @@ version = "0.10"
 default-features = false
 
 [dependencies.bevy_prototype_debug_lines]
-version = "0.9"
+version = "0.10"
 optional = true
 
 [dev-dependencies]

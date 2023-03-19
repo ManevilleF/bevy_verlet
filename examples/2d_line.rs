@@ -7,7 +7,7 @@ fn main() {
             primary_window: Some(Window {
                 title: "2D line".to_string(),
                 resolution: (1000., 800.).into(),
-                ..default(),
+                ..default()
             }),
             ..default()
         }))
