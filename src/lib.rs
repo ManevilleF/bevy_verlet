@@ -58,7 +58,10 @@ use bevy::time::common_conditions::on_timer;
 #[cfg(feature = "debug")]
 use bevy_prototype_debug_lines::DebugLinesPlugin;
 use std::time::Duration;
-use systems::{points::*, sticks::*};
+use systems::{
+    points::update_points,
+    sticks::{handle_stick_constraints, update_sticks},
+};
 
 /// Prelude
 pub mod prelude {
