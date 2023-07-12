@@ -1,7 +1,6 @@
 use crate::{VerletPoint, VerletStick};
 use bevy::log;
 use bevy::prelude::*;
-use bevy_prototype_debug_lines::DebugLines;
 
 macro_rules! get_point_debug {
     ($res:expr) => {
@@ -26,13 +25,13 @@ fn draw_stick(
 
 #[allow(clippy::needless_pass_by_value)]
 pub fn debug_draw_sticks(
-    mut lines: ResMut<DebugLines>,
+    mut gizmos: Gizmos,
     sticks_query: Query<&VerletStick>,
     points_query: Query<&GlobalTransform, With<VerletPoint>>,
 ) {
     for stick in sticks_query.iter() {
         if let Some((a, b)) = draw_stick(stick, &points_query) {
-            lines.line(a, b, 0.);
+            gizmos.line(a, b, Color::WHITE);
         }
     }
 }

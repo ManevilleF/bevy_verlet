@@ -4,16 +4,15 @@ use bevy_verlet::prelude::*;
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins.set(WindowPlugin {
-            window: WindowDescriptor {
+            primary_window: Some(Window {
                 title: "2D cloth".to_string(),
-                width: 1000.,
-                height: 800.,
+                resolution: (1000., 800.).into(),
                 ..default()
-            },
+            }),
             ..default()
         }))
-        .add_plugin(VerletPlugin::default())
-        .add_startup_system(setup)
+        .add_plugins(VerletPlugin::default())
+        .add_systems(Startup, setup)
         .run();
 }
 

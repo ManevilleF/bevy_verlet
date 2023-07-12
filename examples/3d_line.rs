@@ -4,18 +4,15 @@ use bevy_verlet::prelude::*;
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins.set(WindowPlugin {
-            window: WindowDescriptor {
+            primary_window: Some(Window {
                 title: "3D line".to_string(),
-                width: 1000.,
-                height: 800.,
+                resolution: (1000., 800.).into(),
                 ..default()
-            },
+            }),
             ..default()
         }))
-        .add_plugin(VerletPlugin::default())
-        .add_startup_system(setup_camera)
-        .add_startup_system(setup_free_line)
-        .add_startup_system(setup_fixed_line)
+        .add_plugins(VerletPlugin::default())
+        .add_systems(Startup, (setup_camera, setup_free_line, setup_fixed_line))
         .insert_resource(VerletConfig {
             sticks_computation_depth: 5,
             ..Default::default()

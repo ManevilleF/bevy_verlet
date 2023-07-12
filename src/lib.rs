@@ -1,13 +1,3 @@
-//! # Verlet Integration for Bevy
-//!
-//! [![workflow](https://github.com/ManevilleF/bevy_verlet/actions/workflows/rust.yml/badge.svg)](https://github.com/ManevilleF/bevy_verlet/actions/workflows/rust.yml)
-//!
-//! [![MIT licensed](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
-//! [![unsafe forbidden](https://img.shields.io/badge/unsafe-forbidden-success.svg)](https://github.com/rust-secure-code/safety-dance/)
-//! [![Crates.io](https://img.shields.io/crates/v/bevy_verlet.svg)](https://crates.io/crates/bevy_verlet)
-//! [![Docs.rs](https://docs.rs/bevy_verlet/badge.svg)](https://docs.rs/bevy_verlet)
-//! [![dependency status](https://deps.rs/crate/bevy_verlet/0.5.0/status.svg)](https://deps.rs/crate/bevy_verlet)
-//!
 //! Simple Verlet points and sticks implementation for bevy.
 //!
 //! If you are looking for cloth physics, please check [`bevy_silk`](https://github.com/ManevilleF/bevy_silk) instead,
@@ -21,6 +11,7 @@
 //!  | 0.3.x         | 0.7.x     |
 //!  | 0.4.x         | 0.8.x     |
 //!  | 0.5.x         | 0.9.x     |
+//!  | 0.6.x         | 0.11.x    |
 //!
 //! ## Features
 //!
@@ -40,7 +31,7 @@
 //!
 //! This feature will add a *system* drawing debug lines for every stick using [`bevy_prototype_debug_lines`](https://crates.io/crates/bevy_prototype_debug_lines)
 //!
-#![forbid(missing_docs)]
+#![warn(missing_docs)]
 #![forbid(unsafe_code)]
 #![warn(
     clippy::nursery,
@@ -63,9 +54,12 @@ mod systems;
 use crate::verlet_time_step::VerletTimeStep;
 use bevy::log;
 use bevy::prelude::*;
-use bevy::time::FixedTimestep;
-#[cfg(feature = "debug")]
-use bevy_prototype_debug_lines::DebugLinesPlugin;
+use bevy::time::common_conditions::on_fixed_timer;
+use std::time::Duration;
+use systems::{
+    points::update_points,
+    sticks::{handle_stick_constraints, update_sticks},
+};
 
 /// Prelude
 pub mod prelude {
@@ -73,37 +67,34 @@ pub mod prelude {
     pub use crate::resources::*;
     pub use crate::VerletPlugin;
 }
-
 /// Plugin for Verlet physics
 #[derive(Debug, Copy, Clone, Default)]
 pub struct VerletPlugin {
-    /// Custom time step for verlet physics, if set to `None` physics will run every frame
+    /// Custom time step in seconds for verlet physics, if set to `None` physics will run every frame
     pub time_step: Option<f64>,
 }
 
 impl Plugin for VerletPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<VerletConfig>();
-        let system_set = SystemSet::new()
-            .with_system(systems::points::update_points.label("VERLET_UPDATE_POINTS"))
-            .with_system(
-                systems::sticks::update_sticks
-                    .label("VERLET_UPDATE_STICKS")
-                    .after("VERLET_UPDATE_POINTS"),
-            )
-            .with_system(systems::sticks::handle_stick_constraints.after("VERLET_UPDATE_STICKS"));
-        let system_set = if let Some(step) = self.time_step {
+        if let Some(step) = self.time_step {
+            app.add_systems(
+                FixedUpdate,
+                (update_points, update_sticks, handle_stick_constraints)
+                    .chain()
+                    .run_if(on_fixed_timer(Duration::from_secs_f64(step))),
+            );
             app.insert_resource(VerletTimeStep::FixedDeltaTime(step));
-            system_set.with_run_criteria(FixedTimestep::step(step))
         } else {
+            app.add_systems(
+                Update,
+                (update_points, update_sticks, handle_stick_constraints).chain(),
+            );
             app.insert_resource(VerletTimeStep::DeltaTime);
-            system_set
         };
-        app.add_system_set(system_set);
         #[cfg(feature = "debug")]
         {
-            app.add_plugin(DebugLinesPlugin::default());
-            app.add_system(systems::debug::debug_draw_sticks);
+            app.add_systems(PostUpdate, systems::debug::debug_draw_sticks);
         }
         app.register_type::<VerletPoint>()
             .register_type::<VerletLocked>()

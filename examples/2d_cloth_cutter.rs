@@ -1,24 +1,19 @@
-use bevy::prelude::*;
+use bevy::{prelude::*, window::PrimaryWindow};
 use bevy_verlet::prelude::*;
 
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins.set(WindowPlugin {
-            window: WindowDescriptor {
+            primary_window: Some(Window {
                 title: "2D Cloth cutter".to_string(),
-                width: 1400.,
-                height: 900.,
+                resolution: (1400., 900.).into(),
                 ..default()
-            },
+            }),
             ..default()
         }))
-        .add_plugin(VerletPlugin::default())
-        .insert_resource(VerletConfig {
-            parallel_processing_batch_size: Some(500),
-            ..Default::default()
-        })
-        .add_startup_system(setup)
-        .add_system(cut_sticks)
+        .add_plugins(VerletPlugin::default())
+        .add_systems(Startup, setup)
+        .add_systems(Update, cut_sticks)
         .run();
 }
 
@@ -78,8 +73,10 @@ fn spawn_stick(
 }
 
 fn mouse_coords(window: &Window, position: Vec2) -> Vec2 {
-    let window_size = Vec2::new(window.width(), window.height());
-    position - window_size / 2.
+    Vec2::new(
+        position.x - window.width() / 2.0,
+        window.height() / 2.0 - position.y,
+    )
 }
 
 fn cut_sticks(
@@ -87,12 +84,12 @@ fn cut_sticks(
     points: Query<&Transform, With<VerletPoint>>,
     sticks: Query<(Entity, &VerletStick)>,
     mouse_input: Res<Input<MouseButton>>,
-    windows: Res<Windows>,
+    windows: Query<&Window, With<PrimaryWindow>>,
 ) {
     if !mouse_input.pressed(MouseButton::Left) {
         return;
     }
-    let window = windows.get_primary().unwrap();
+    let window = windows.single();
     let p = match window.cursor_position() {
         None => return,
         Some(p) => mouse_coords(window, p),

@@ -28,11 +28,13 @@ pub fn update_points(
     };
     let gravity = config.gravity * delta_time;
     let friction = config.friction_coefficient();
-    // TODO: Once https://github.com/bevyengine/bevy/pull/4777 is merged use automatic batching
-    if let Some(batch_size) = config.parallel_processing_batch_size {
-        points_query.par_for_each_mut(batch_size, |(mut transform, mut point)| {
-            update_point(&mut transform, &mut point, gravity, friction);
-        });
+
+    if config.parallel_processing {
+        points_query
+            .par_iter_mut()
+            .for_each_mut(|(mut transform, mut point)| {
+                update_point(&mut transform, &mut point, gravity, friction);
+            });
     } else {
         for (mut transform, mut point) in points_query.iter_mut() {
             update_point(&mut transform, &mut point, gravity, friction);

@@ -1,5 +1,3 @@
-<!-- cargo-sync-readme start -->
-
 # Verlet Integration for Bevy
 
 [![workflow](https://github.com/ManevilleF/bevy_verlet/actions/workflows/rust.yml/badge.svg)](https://github.com/ManevilleF/bevy_verlet/actions/workflows/rust.yml)
@@ -9,6 +7,8 @@
 [![Crates.io](https://img.shields.io/crates/v/bevy_verlet.svg)](https://crates.io/crates/bevy_verlet)
 [![Docs.rs](https://docs.rs/bevy_verlet/badge.svg)](https://docs.rs/bevy_verlet)
 [![dependency status](https://deps.rs/crate/bevy_verlet/0.5.0/status.svg)](https://deps.rs/crate/bevy_verlet)
+
+<!-- cargo-sync-readme start -->
 
 Simple Verlet points and sticks implementation for bevy.
 
@@ -23,6 +23,7 @@ If you are looking for cloth physics, please check [`bevy_silk`](https://github.
  | 0.3.x         | 0.7.x     |
  | 0.4.x         | 0.8.x     |
  | 0.5.x         | 0.9.x     |
+ | 0.6.x         | 0.10.x    |
 
 ## Features
 

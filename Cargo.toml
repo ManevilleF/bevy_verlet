@@ -14,23 +14,19 @@ documentation = "https://docs.rs/bevy_verlet"
 
 [features]
 default = []
-debug = ["bevy_prototype_debug_lines"]
+debug = ["bevy/bevy_gizmos", "bevy/bevy_render"]
 
 [dependencies]
 
 [dependencies.bevy]
-version = "0.9"
+version = "0.11"
 default-features = false
-
-[dependencies.bevy_prototype_debug_lines]
-version = "0.9"
-optional = true
 
 [dev-dependencies]
 
 [dev-dependencies.bevy]
-version = "0.9"
-features = ["render", "bevy_winit", "x11"]
+version = "0.11"
+features = ["bevy_render", "bevy_winit", "x11", "bevy_core_pipeline", "bevy_sprite", "bevy_pbr"]
 default-features = false
 
 [[example]]
