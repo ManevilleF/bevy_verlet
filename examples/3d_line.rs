@@ -11,10 +11,8 @@ fn main() {
             }),
             ..default()
         }))
-        .add_plugin(VerletPlugin::default())
-        .add_startup_system(setup_camera)
-        .add_startup_system(setup_free_line)
-        .add_startup_system(setup_fixed_line)
+        .add_plugins(VerletPlugin::default())
+        .add_systems(Startup, (setup_camera, setup_free_line, setup_fixed_line))
         .insert_resource(VerletConfig {
             sticks_computation_depth: 5,
             ..Default::default()

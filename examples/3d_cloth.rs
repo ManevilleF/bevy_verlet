@@ -11,8 +11,8 @@ fn main() {
             }),
             ..default()
         }))
-        .add_plugin(VerletPlugin::default())
-        .add_startup_system(setup)
+        .add_plugins(VerletPlugin::default())
+        .add_systems(Startup, setup)
         .insert_resource(VerletConfig {
             sticks_computation_depth: 5,
             ..Default::default()

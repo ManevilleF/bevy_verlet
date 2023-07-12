@@ -11,9 +11,9 @@ fn main() {
             }),
             ..default()
         }))
-        .add_plugin(VerletPlugin::default())
-        .add_startup_system(setup)
-        .add_system(cut_sticks)
+        .add_plugins(VerletPlugin::default())
+        .add_systems(Startup, setup)
+        .add_systems(Update, cut_sticks)
         .run();
 }
 
@@ -73,8 +73,10 @@ fn spawn_stick(
 }
 
 fn mouse_coords(window: &Window, position: Vec2) -> Vec2 {
-    let window_size = Vec2::new(window.width(), window.height());
-    position - window_size / 2.
+    Vec2::new(
+        position.x - window.width() / 2.0,
+        window.height() / 2.0 - position.y,
+    )
 }
 
 fn cut_sticks(
