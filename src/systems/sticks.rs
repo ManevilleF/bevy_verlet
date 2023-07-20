@@ -49,32 +49,20 @@ pub fn update_sticks(
     }
 }
 
-fn handle_stick_constraint(
-    entity: Entity,
+fn should_delete_stick(
     stick: &VerletStick,
     max_tension: f32,
     points_query: &Query<&Transform, With<VerletPoint>>,
-) -> Option<Entity> {
-    let point_a = match points_query.get(stick.point_a_entity) {
-        Ok(p) => p,
+) -> bool {
+    let [point_a, point_b] = match points_query.get_many(stick.entities()) {
+        Ok(v) => v,
         Err(e) => {
-            log::error!("Could not find point_a entity for stick: {}", e);
-            return None;
+            log::error!("Could not find points entities for stick: {}", e);
+            return false;
         }
     };
-    let point_b = match points_query.get(stick.point_b_entity) {
-        Ok(p) => p,
-        Err(e) => {
-            log::error!("Could not find point_b entity for stick: {}", e);
-            return None;
-        }
-    };
-    let distance = point_a.translation.distance(point_b.translation);
-    if distance > stick.length * max_tension {
-        Some(entity)
-    } else {
-        None
-    }
+    let distance = point_a.translation.distance_squared(point_b.translation);
+    distance > (stick.length * max_tension).powi(2)
 }
 
 pub fn handle_stick_constraints(
@@ -88,9 +76,7 @@ pub fn handle_stick_constraints(
         sticks_query
             .par_iter()
             .for_each(|(entity, stick, max_tension)| {
-                if let Some(entity) =
-                    handle_stick_constraint(entity, stick, **max_tension, &points_query)
-                {
+                if should_delete_stick(stick, **max_tension, &points_query) {
                     par_commands.command_scope(|mut cmd| {
                         cmd.entity(entity).despawn_recursive();
                     });
@@ -98,9 +84,7 @@ pub fn handle_stick_constraints(
             });
     } else {
         for (entity, stick, max_tension) in sticks_query.iter() {
-            if let Some(entity) =
-                handle_stick_constraint(entity, stick, **max_tension, &points_query)
-            {
+            if should_delete_stick(stick, **max_tension, &points_query) {
                 commands.entity(entity).despawn_recursive();
             }
         }

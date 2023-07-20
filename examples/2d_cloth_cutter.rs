@@ -1,4 +1,4 @@
-use bevy::{prelude::*, window::PrimaryWindow};
+use bevy::{math::Vec3Swizzles, prelude::*, window::PrimaryWindow};
 use bevy_verlet::prelude::*;
 
 fn main() {
@@ -20,8 +20,8 @@ fn main() {
 fn setup(mut commands: Commands) {
     commands.spawn(Camera2dBundle::default());
     let stick_length: f32 = 11.;
-    let (origin_x, origin_y) = (-600., 420.);
-    let (points_x_count, points_y_count) = (121, 60);
+    let (origin_x, origin_y) = (-690., 420.);
+    let (points_x_count, points_y_count) = (139, 80);
     let mut entities = Vec::new();
     for j in 0..points_y_count {
         for i in 0..points_x_count {
@@ -96,12 +96,10 @@ fn cut_sticks(
     };
     let l = 20.;
     for (entity, stick) in sticks.iter() {
-        let point_a = points.get(stick.point_a_entity).unwrap();
-        let point_b = points.get(stick.point_b_entity).unwrap();
-        let (a, b) = (
-            Vec2::new(point_a.translation.x, point_a.translation.y),
-            Vec2::new(point_b.translation.x, point_b.translation.y),
-        );
+        let [a, b] = points
+            .get_many(stick.entities())
+            .map(|v| v.map(|t| t.translation.xy()))
+            .unwrap();
         let distance_a = p.distance(a);
         let distance_b = p.distance(b);
         if distance_a > 0. && distance_a <= l && distance_b > 0. && distance_b <= l {
