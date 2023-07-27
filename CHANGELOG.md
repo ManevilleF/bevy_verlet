@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.6.1
+
+* Performance improvements (#12)
+
 ## 0.6.0
 
 * `bevy` 0.11
