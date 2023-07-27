@@ -29,7 +29,7 @@
 //!
 //! 1. `debug`
 //!
-//! This feature will add a *system* drawing debug lines for every stick using [`bevy_prototype_debug_lines`](https://crates.io/crates/bevy_prototype_debug_lines)
+//! This feature will add a *system* drawing debug lines for every stick using bevy gizmos
 //!
 #![warn(missing_docs)]
 #![forbid(unsafe_code)]
