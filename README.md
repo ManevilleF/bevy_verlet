@@ -27,11 +27,14 @@ If you are looking for cloth physics, please check [`bevy_silk`](https://github.
 
 ## Features
 
-You can simply add a `VerletPoint` component on any entity with a `Transform` and the verlet physics will apply.
+You can simply add a `VerletPoint` component on any entity with a
+`Transform` and the verlet physics will apply.
 
-Connect points using `VerletStick` to constrain movement (see [examples](./examples)).
+Connect points using `VerletStick` to constrain movement (see
+[examples](./examples)).
 
-Lock some points by adding the `VerletLocked` component on a `VerletPoint` entity.
+Lock some points by adding the `VerletLocked` component on a `VerletPoint`
+entity.
 
 Customize *friction* and *gravity* with the `VerletConfig` resource.
 
@@ -41,8 +44,8 @@ Customize *friction* and *gravity* with the `VerletConfig` resource.
 
 1. `debug`
 
-This feature will add a *system* drawing debug lines for every stick using bevy gizmos
-
+This feature will add a *system* drawing debug lines for every stick using
+bevy gizmos
 
 <!-- cargo-sync-readme end -->
 

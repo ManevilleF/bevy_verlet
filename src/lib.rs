@@ -15,11 +15,14 @@
 //!
 //! ## Features
 //!
-//! You can simply add a `VerletPoint` component on any entity with a `Transform` and the verlet physics will apply.
+//! You can simply add a `VerletPoint` component on any entity with a
+//! `Transform` and the verlet physics will apply.
 //!
-//! Connect points using `VerletStick` to constrain movement (see [examples](./examples)).
+//! Connect points using `VerletStick` to constrain movement (see
+//! [examples](./examples)).
 //!
-//! Lock some points by adding the `VerletLocked` component on a `VerletPoint` entity.
+//! Lock some points by adding the `VerletLocked` component on a `VerletPoint`
+//! entity.
 //!
 //! Customize *friction* and *gravity* with the `VerletConfig` resource.
 //!
@@ -29,8 +32,8 @@
 //!
 //! 1. `debug`
 //!
-//! This feature will add a *system* drawing debug lines for every stick using bevy gizmos
-//!
+//! This feature will add a *system* drawing debug lines for every stick using
+//! bevy gizmos
 #![warn(missing_docs)]
 #![forbid(unsafe_code)]
 #![warn(
@@ -45,16 +48,15 @@
     clippy::redundant_pub_crate
 )]
 
-pub use {components::*, resources::*};
+pub use components::*;
+pub use resources::*;
 
 mod components;
 mod resources;
 mod systems;
 
 use crate::verlet_time_step::VerletTimeStep;
-use bevy::log;
-use bevy::prelude::*;
-use bevy::time::common_conditions::on_fixed_timer;
+use bevy::{log, prelude::*, time::common_conditions::on_fixed_timer};
 use std::time::Duration;
 use systems::{
     points::update_points,
@@ -63,14 +65,13 @@ use systems::{
 
 /// Prelude
 pub mod prelude {
-    pub use crate::components::*;
-    pub use crate::resources::*;
-    pub use crate::VerletPlugin;
+    pub use crate::{components::*, resources::*, VerletPlugin};
 }
 /// Plugin for Verlet physics
 #[derive(Debug, Copy, Clone, Default)]
 pub struct VerletPlugin {
-    /// Custom time step in seconds for verlet physics, if set to `None` physics will run every frame
+    /// Custom time step in seconds for verlet physics, if set to `None` physics
+    /// will run every frame
     pub time_step: Option<f64>,
 }
 

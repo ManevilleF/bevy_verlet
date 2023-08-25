@@ -1,4 +1,7 @@
-pub use {locked::*, point::*, stick::*, stick_max_tension::*};
+pub use locked::*;
+pub use point::*;
+pub use stick::*;
+pub use stick_max_tension::*;
 
 mod locked;
 mod point;

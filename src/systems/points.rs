@@ -1,6 +1,7 @@
-use crate::components::{VerletLocked, VerletPoint};
-use crate::resources::verlet_time_step::VerletTimeStep;
-use crate::resources::VerletConfig;
+use crate::{
+    components::{VerletLocked, VerletPoint},
+    resources::{verlet_time_step::VerletTimeStep, VerletConfig},
+};
 use bevy::prelude::*;
 
 fn update_point(
@@ -36,7 +37,7 @@ pub fn update_points(
                 update_point(&mut transform, &mut point, gravity, friction);
             });
     } else {
-        for (mut transform, mut point) in points_query.iter_mut() {
+        for (mut transform, mut point) in &mut points_query {
             update_point(&mut transform, &mut point, gravity, friction);
         }
     }
