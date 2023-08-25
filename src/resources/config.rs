@@ -1,17 +1,21 @@
-use bevy::ecs::prelude::Resource;
-use bevy::math::{Vec2, Vec3, Vec3Swizzles};
+use bevy::{
+    ecs::prelude::Resource,
+    math::{Vec2, Vec3, Vec3Swizzles},
+};
 
 /// Verlet physics configuration
 #[derive(Debug, Copy, Clone, Resource)]
 pub struct VerletConfig {
     /// Custom gravity, classic (0, -9.81, 0) is used by default
     pub gravity: Vec3,
-    /// Custom friction to apply to velocity, slowing down the simulation and reducing elasticity.
+    /// Custom friction to apply to velocity, slowing down the simulation and
+    /// reducing elasticity.
     ///
     /// Note: will be clamped between 0.0 and 1.0
     pub friction: f32,
     /// Sets the number of sticks computation iteration.
-    /// The higher the value, the more precision and less elasticity for the sticks but the cost is increased
+    /// The higher the value, the more precision and less elasticity for the
+    /// sticks but the cost is increased
     pub sticks_computation_depth: u8,
     /// Enables parallel computing for points
     pub parallel_processing: bool,

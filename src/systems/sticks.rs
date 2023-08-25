@@ -1,8 +1,9 @@
 #![allow(clippy::needless_pass_by_value)]
-use crate::components::{VerletLocked, VerletPoint, VerletStick};
-use crate::{VerletConfig, VerletStickMaxTension};
-use bevy::log;
-use bevy::prelude::*;
+use crate::{
+    components::{VerletLocked, VerletPoint, VerletStick},
+    VerletConfig, VerletStickMaxTension,
+};
+use bevy::{log, prelude::*};
 
 #[allow(
     clippy::type_complexity,
