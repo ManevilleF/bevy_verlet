@@ -33,7 +33,7 @@ pub fn update_points(
     if config.parallel_processing {
         points_query
             .par_iter_mut()
-            .for_each_mut(|(mut transform, mut point)| {
+            .for_each(|(mut transform, mut point)| {
                 update_point(&mut transform, &mut point, gravity, friction);
             });
     } else {

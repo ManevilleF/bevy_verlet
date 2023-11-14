@@ -56,7 +56,7 @@ mod resources;
 mod systems;
 
 use crate::verlet_time_step::VerletTimeStep;
-use bevy::{log, prelude::*, time::common_conditions::on_fixed_timer};
+use bevy::{log, prelude::*, time::common_conditions::on_timer};
 use std::time::Duration;
 use systems::{
     points::update_points,
@@ -78,19 +78,15 @@ pub struct VerletPlugin {
 impl Plugin for VerletPlugin {
     fn build(&self, app: &mut App) {
         app.init_resource::<VerletConfig>();
+        let system_set = (update_points, update_sticks, handle_stick_constraints).chain();
         if let Some(step) = self.time_step {
             app.add_systems(
                 FixedUpdate,
-                (update_points, update_sticks, handle_stick_constraints)
-                    .chain()
-                    .run_if(on_fixed_timer(Duration::from_secs_f64(step))),
+                system_set.run_if(on_timer(Duration::from_secs_f64(step))),
             );
             app.insert_resource(VerletTimeStep::FixedDeltaTime(step));
         } else {
-            app.add_systems(
-                Update,
-                (update_points, update_sticks, handle_stick_constraints).chain(),
-            );
+            app.add_systems(FixedUpdate, system_set);
             app.insert_resource(VerletTimeStep::DeltaTime);
         };
         #[cfg(feature = "debug")]
