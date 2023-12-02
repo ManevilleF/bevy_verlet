@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.7.0
+
 * Bevy 0.12 support (#14)
 * Verlet physics always happens on `FixedUpdate` schedule (#12)
 
@@ -40,7 +42,8 @@
 
 ## 0.1.1
 
-* The `VerletConfig::parallel_processing_batch_size` is only used for `VerletPoint` processing
+* The `VerletConfig::parallel_processing_batch_size` is only used for
+`VerletPoint` processing
 * The cloth cutting example improved and scaled up
 * The debug stick printing system moved in a private `debug` module
 

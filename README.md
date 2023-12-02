@@ -6,13 +6,14 @@
 [![unsafe forbidden](https://img.shields.io/badge/unsafe-forbidden-success.svg)](https://github.com/rust-secure-code/safety-dance/)
 [![Crates.io](https://img.shields.io/crates/v/bevy_verlet.svg)](https://crates.io/crates/bevy_verlet)
 [![Docs.rs](https://docs.rs/bevy_verlet/badge.svg)](https://docs.rs/bevy_verlet)
-[![dependency status](https://deps.rs/crate/bevy_verlet/0.6.1/status.svg)](https://deps.rs/crate/bevy_verlet)
+[![dependency status](https://deps.rs/crate/bevy_verlet/0.7.0/status.svg)](https://deps.rs/crate/bevy_verlet)
 
 <!-- cargo-sync-readme start -->
 
 Simple Verlet points and sticks implementation for bevy.
 
-If you are looking for cloth physics, please check [`bevy_silk`](https://github.com/ManevilleF/bevy_silk) instead,
+If you are looking for cloth physics, please check
+[`bevy_silk`](https://github.com/ManevilleF/bevy_silk) instead
 
 ## Bevy versions
 
@@ -24,6 +25,7 @@ If you are looking for cloth physics, please check [`bevy_silk`](https://github.
  | 0.4.x         | 0.8.x     |
  | 0.5.x         | 0.9.x     |
  | 0.6.x         | 0.11.x    |
+ | 0.7.x         | 0.12.x    |
 
 ## Features
 
@@ -68,7 +70,7 @@ bevy gizmos
 3. 2D cloth cutting
 
    `cargo run --example 2d_cloth_cutter --features "debug"
-   
+
    ![Alt](./docs/demo_cloth_cutting.gif "demo gif")
 
 ### 3D
@@ -79,5 +81,6 @@ bevy gizmos
 ## Credits
 
 Inspired by:
-- This [Sebastian Lague video](https://www.youtube.com/watch?v=PGk0rnyTa1U)
-- This [Coding Math course](https://www.youtube.com/watch?v=3HjO_RGIjCU)
+
+* This [Sebastian Lague video](https://www.youtube.com/watch?v=PGk0rnyTa1U)
+* This [Coding Math course](https://www.youtube.com/watch?v=3HjO_RGIjCU)
