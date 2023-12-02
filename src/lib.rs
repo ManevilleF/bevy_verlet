@@ -49,13 +49,12 @@
 )]
 
 pub use components::*;
-pub use resources::*;
+pub use config::*;
 
 mod components;
-mod resources;
+mod config;
 mod systems;
 
-use crate::verlet_time_step::VerletTimeStep;
 use bevy::{log, prelude::*, time::common_conditions::on_timer};
 use std::time::Duration;
 use systems::{
@@ -65,13 +64,13 @@ use systems::{
 
 /// Prelude
 pub mod prelude {
-    pub use crate::{components::*, resources::*, VerletPlugin};
+    pub use crate::{components::*, config::*, VerletPlugin};
 }
 /// Plugin for Verlet physics
 #[derive(Debug, Copy, Clone, Default)]
 pub struct VerletPlugin {
     /// Custom time step in seconds for verlet physics, if set to `None` physics
-    /// will run every frame
+    /// will run every [`FixedUpdate`] frame
     pub time_step: Option<f64>,
 }
 
@@ -84,10 +83,8 @@ impl Plugin for VerletPlugin {
                 FixedUpdate,
                 system_set.run_if(on_timer(Duration::from_secs_f64(step))),
             );
-            app.insert_resource(VerletTimeStep::FixedDeltaTime(step));
         } else {
             app.add_systems(FixedUpdate, system_set);
-            app.insert_resource(VerletTimeStep::DeltaTime);
         };
         #[cfg(feature = "debug")]
         {

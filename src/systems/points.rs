@@ -1,6 +1,6 @@
 use crate::{
     components::{VerletLocked, VerletPoint},
-    resources::{verlet_time_step::VerletTimeStep, VerletConfig},
+    config::VerletConfig,
 };
 use bevy::prelude::*;
 
@@ -18,16 +18,11 @@ fn update_point(
 
 #[allow(clippy::needless_pass_by_value, clippy::cast_possible_truncation)]
 pub fn update_points(
-    time_step: Res<VerletTimeStep>,
     mut points_query: Query<(&mut Transform, &mut VerletPoint), Without<VerletLocked>>,
     time: Res<Time>,
     config: Res<VerletConfig>,
 ) {
-    let delta_time = match &*time_step {
-        VerletTimeStep::DeltaTime => time.delta_seconds(),
-        VerletTimeStep::FixedDeltaTime(dt) => (*dt * *dt) as f32,
-    };
-    let gravity = config.gravity * delta_time;
+    let gravity = config.gravity * time.delta_seconds();
     let friction = config.friction_coefficient();
 
     if config.parallel_processing {

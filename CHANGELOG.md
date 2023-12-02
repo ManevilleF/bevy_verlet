@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+* Bevy 0.12 support (#14)
+* Verlet physics always happens on `FixedUpdate` schedule (#12)
+
 ## 0.6.1
 
 * Performance improvements (#12)
