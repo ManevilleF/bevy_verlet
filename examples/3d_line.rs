@@ -32,9 +32,9 @@ fn setup_free_line(
     mut materials: ResMut<Assets<StandardMaterial>>,
     mut meshes: ResMut<Assets<Mesh>>,
 ) {
-    let material = materials.add(Color::WHITE.into());
-    let fixed_material = materials.add(Color::RED.into());
-    let mesh = meshes.add(Mesh::from(shape::Cube::new(1.)));
+    let material = materials.add(Color::WHITE);
+    let fixed_material = materials.add(Color::RED);
+    let mesh = meshes.add(Cuboid::new(1., 1., 1.));
     let stick_length: f32 = 2.;
     let points_count = 10;
     let mut previous_entity = None;
@@ -71,9 +71,9 @@ fn setup_fixed_line(
     mut materials: ResMut<Assets<StandardMaterial>>,
     mut meshes: ResMut<Assets<Mesh>>,
 ) {
-    let material = materials.add(Color::WHITE.into());
-    let fixed_material = materials.add(Color::RED.into());
-    let mesh = meshes.add(Mesh::from(shape::Cube::new(1.)));
+    let material = materials.add(Color::WHITE);
+    let fixed_material = materials.add(Color::RED);
+    let mesh = meshes.add(Cuboid::new(1., 1., 1.));
     let stick_length: f32 = 2.;
     let points_count = 20;
     let start_pos = -10.;
