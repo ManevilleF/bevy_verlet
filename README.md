@@ -6,7 +6,7 @@
 [![unsafe forbidden](https://img.shields.io/badge/unsafe-forbidden-success.svg)](https://github.com/rust-secure-code/safety-dance/)
 [![Crates.io](https://img.shields.io/crates/v/bevy_verlet.svg)](https://crates.io/crates/bevy_verlet)
 [![Docs.rs](https://docs.rs/bevy_verlet/badge.svg)](https://docs.rs/bevy_verlet)
-[![dependency status](https://deps.rs/crate/bevy_verlet/0.7.0/status.svg)](https://deps.rs/crate/bevy_verlet)
+[![dependency status](https://deps.rs/crate/bevy_verlet/0.8.0/status.svg)](https://deps.rs/crate/bevy_verlet)
 
 <!-- cargo-sync-readme start -->
 
@@ -26,6 +26,7 @@ If you are looking for cloth physics, please check
  | 0.5.x         | 0.9.x     |
  | 0.6.x         | 0.11.x    |
  | 0.7.x         | 0.12.x    |
+ | 0.8.x         | 0.13.x    |
 
 ## Features
 

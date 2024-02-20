@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+## 0.8.0
+
+* Bevy 0.13 support (#15)
+
 ## 0.7.0
 
 * Bevy 0.12 support (#14)
