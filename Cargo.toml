@@ -19,14 +19,25 @@ debug = ["bevy/bevy_gizmos", "bevy/bevy_render"]
 [dependencies]
 
 [dependencies.bevy]
-version = "0.12"
+version = "0.13"
 default-features = false
 
 [dev-dependencies]
 
 [dev-dependencies.bevy]
-version = "0.12"
-features = ["bevy_render", "bevy_winit", "x11", "bevy_core_pipeline", "bevy_sprite", "bevy_pbr"]
+version = "0.13"
+features = [
+  "bevy_render",
+  "bevy_winit",
+  "bevy_core_pipeline",
+  "bevy_sprite",
+  "bevy_pbr",
+  "x11",
+  "multi-threaded",
+  "tonemapping_luts",
+  # Faster compilation
+  "dynamic_linking",
+]
 default-features = false
 
 [[example]]

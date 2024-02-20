@@ -29,9 +29,9 @@ fn setup(
         transform: Transform::from_xyz(-50., 0., -50.).looking_at(Vec3::ZERO, Vec3::Y),
         ..Default::default()
     });
-    let material = materials.add(Color::WHITE.into());
-    let fixed_material = materials.add(Color::RED.into());
-    let mesh = meshes.add(Mesh::from(shape::Cube::new(1.)));
+    let material = materials.add(Color::WHITE);
+    let fixed_material = materials.add(Color::RED);
+    let mesh = meshes.add(Cuboid::new(1., 1., 1.));
     let stick_length: f32 = 2.;
     let (origin_x, origin_y) = (-5., 10.);
     let (points_x_count, points_y_count) = (20, 15);

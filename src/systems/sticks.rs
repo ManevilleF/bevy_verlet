@@ -3,7 +3,7 @@ use crate::{
     components::{VerletLocked, VerletPoint, VerletStick},
     VerletConfig, VerletStickMaxTension,
 };
-use bevy::{log, prelude::*};
+use bevy::{log, prelude::*, utils::HashMap};
 
 #[allow(
     clippy::type_complexity,
@@ -13,18 +13,20 @@ use bevy::{log, prelude::*};
 pub fn update_sticks(
     config: Res<VerletConfig>,
     sticks_query: Query<&VerletStick>,
-    mut points_query: Query<(&mut Transform, Option<&VerletLocked>), With<VerletPoint>>,
+    mut points_query: Query<(Entity, &mut Transform, Option<&VerletLocked>), With<VerletPoint>>,
 ) {
+    let mut points_map: HashMap<_, _> = points_query
+        .iter_mut()
+        .map(|(e, t, l)| (e, (t, l)))
+        .collect();
     for _ in 0..=config.sticks_computation_depth {
         for stick in sticks_query.iter() {
-            let [(mut transform_a, a_locked), (mut transform_b, b_locked)] =
-                match points_query.get_many_mut([stick.point_a_entity, stick.point_b_entity]) {
-                    Ok(v) => v,
-                    Err(e) => {
-                        log::error!("Could not find point entities for stick: {}", e);
-                        continue;
-                    }
-                };
+            let Some([(ref mut transform_a, a_locked), (ref mut transform_b, b_locked)]) =
+                points_map.get_many_mut([&stick.point_a_entity, &stick.point_b_entity])
+            else {
+                log::error!("Could not find point entities for stick {stick:?}");
+                continue;
+            };
             let (a_locked, b_locked) = (a_locked.is_some(), b_locked.is_some());
             if a_locked && b_locked {
                 continue;

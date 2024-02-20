@@ -83,7 +83,7 @@ fn cut_sticks(
     mut commands: Commands,
     points: Query<&Transform, With<VerletPoint>>,
     sticks: Query<(Entity, &VerletStick)>,
-    mouse_input: Res<Input<MouseButton>>,
+    mouse_input: Res<ButtonInput<MouseButton>>,
     windows: Query<&Window, With<PrimaryWindow>>,
 ) {
     if !mouse_input.pressed(MouseButton::Left) {
