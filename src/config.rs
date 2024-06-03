@@ -25,7 +25,7 @@ impl Default for VerletConfig {
     fn default() -> Self {
         Self {
             gravity: Vec3::new(0., -9.81, 0.),
-            friction: 0.02,
+            friction: 0.01,
             sticks_computation_depth: 5,
             parallel_processing: true,
         }

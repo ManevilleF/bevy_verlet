@@ -38,7 +38,7 @@ fn setup(mut commands: Commands) {
                     ),
                     ..Default::default()
                 },
-                VerletPoint::default(),
+                VerletPoint::new(0.2),
                 Name::new(format!("Point {}", i)),
             ));
             if j == 0 {

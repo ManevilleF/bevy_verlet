@@ -1,6 +1,8 @@
 use bevy::{math::Vec3Swizzles, prelude::*, window::PrimaryWindow};
 use bevy_verlet::prelude::*;
 
+const MOUSE_RADIUS: f32 = 20.0;
+
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins.set(WindowPlugin {
@@ -13,7 +15,7 @@ fn main() {
         }))
         .add_plugins(VerletPlugin::default())
         .add_systems(Startup, setup)
-        .add_systems(Update, cut_sticks)
+        .add_systems(Update, (drag_points, cut_sticks))
         .run();
 }
 
@@ -31,7 +33,7 @@ fn setup(mut commands: Commands) {
                     origin_y + (-10. * j as f32),
                     0.,
                 )),
-                VerletPoint::default(),
+                VerletPoint::new(0.1),
                 Name::new(format!("Point {}", i)),
             ));
             if j == 0 && i % 2 == 0 {
@@ -67,7 +69,7 @@ fn spawn_stick(
                 point_b_entity: *other_entity,
                 length,
             },
-            VerletStickMaxTension(5.),
+            VerletStickMaxTension(3.),
         ));
     }
 }
@@ -86,7 +88,7 @@ fn cut_sticks(
     mouse_input: Res<ButtonInput<MouseButton>>,
     windows: Query<&Window, With<PrimaryWindow>>,
 ) {
-    if !mouse_input.pressed(MouseButton::Left) {
+    if !mouse_input.pressed(MouseButton::Right) {
         return;
     }
     let window = windows.single();
@@ -94,7 +96,6 @@ fn cut_sticks(
         None => return,
         Some(p) => mouse_coords(window, p),
     };
-    let l = 20.;
     for (entity, stick) in sticks.iter() {
         let [a, b] = points
             .get_many(stick.entities())
@@ -102,8 +103,45 @@ fn cut_sticks(
             .unwrap();
         let distance_a = p.distance(a);
         let distance_b = p.distance(b);
-        if distance_a > 0. && distance_a <= l && distance_b > 0. && distance_b <= l {
+        if distance_a > 0.
+            && distance_a <= MOUSE_RADIUS
+            && distance_b > 0.
+            && distance_b <= MOUSE_RADIUS
+        {
             commands.entity(entity).despawn_recursive();
         }
+    }
+}
+
+fn drag_points(
+    mut points: Query<(Entity, &mut Transform), With<VerletPoint>>,
+    mouse_input: Res<ButtonInput<MouseButton>>,
+    windows: Query<&Window, With<PrimaryWindow>>,
+    mut dragged: Local<Vec<Entity>>,
+) {
+    if !mouse_input.pressed(MouseButton::Left) {
+        *dragged = vec![];
+        return;
+    }
+    let window = windows.single();
+    let p = match window.cursor_position() {
+        None => return,
+        Some(p) => mouse_coords(window, p),
+    };
+    if dragged.is_empty() {
+        *dragged = points
+            .iter()
+            .filter_map(|(e, tr)| {
+                let point = tr.translation.xy();
+                let dist = point.distance(p);
+                (dist <= MOUSE_RADIUS).then_some(e)
+            })
+            .collect();
+        return;
+    };
+    let mut iter = points.iter_many_mut(&*dragged);
+    while let Some((_, mut tr)) = iter.fetch_next() {
+        tr.translation.x = p.x;
+        tr.translation.y = p.y;
     }
 }

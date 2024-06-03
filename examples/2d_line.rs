@@ -27,7 +27,7 @@ fn setup_free_line(mut commands: Commands) {
     for i in 0..=points_count {
         let mut cmd = commands.spawn((
             sprite_bundle(Color::WHITE, Vec2::new(50. * i as f32, 300.)),
-            VerletPoint::default(),
+            VerletPoint::new(0.1),
             Name::new(format!("Point {}", i)),
         ));
         if previous_entity.is_none() {

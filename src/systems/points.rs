@@ -9,10 +9,11 @@ fn update_point(
     point: &mut VerletPoint,
     acceleration: Vec3,
     friction: f32,
+    dt: f32,
 ) {
     let position = transform.translation;
     let velocity = point.old_position.map_or(Vec3::ZERO, |pos| position - pos);
-    transform.translation += velocity * friction + acceleration;
+    transform.translation += velocity * friction + (acceleration / point.mass) * friction * dt * dt;
     point.old_position = Some(position);
 }
 
@@ -22,18 +23,30 @@ pub fn update_points(
     time: Res<Time>,
     config: Res<VerletConfig>,
 ) {
-    let gravity = config.gravity * time.delta_seconds();
+    let gravity = config.gravity;
     let friction = config.friction_coefficient();
 
     if config.parallel_processing {
         points_query
             .par_iter_mut()
             .for_each(|(mut transform, mut point)| {
-                update_point(&mut transform, &mut point, gravity, friction);
+                update_point(
+                    &mut transform,
+                    &mut point,
+                    gravity,
+                    friction,
+                    time.delta_seconds(),
+                );
             });
     } else {
         for (mut transform, mut point) in &mut points_query {
-            update_point(&mut transform, &mut point, gravity, friction);
+            update_point(
+                &mut transform,
+                &mut point,
+                gravity,
+                friction,
+                time.delta_seconds(),
+            );
         }
     }
 }
