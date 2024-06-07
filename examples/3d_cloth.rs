@@ -34,7 +34,7 @@ fn setup(
     let mesh = meshes.add(Cuboid::new(1., 1., 1.));
     let stick_length: f32 = 2.;
     let (origin_x, origin_y) = (-5., 10.);
-    let (points_x_count, points_y_count) = (20, 15);
+    let (points_x_count, points_y_count) = (30, 25);
     let mut entities = Vec::new();
     for j in 0..points_y_count {
         for i in 0..points_x_count {
