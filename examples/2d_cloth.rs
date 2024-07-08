@@ -1,4 +1,4 @@
-use bevy::color::css::{RED, WHITE};
+use bevy::color::palettes::css::{RED, WHITE};
 use bevy::prelude::*;
 use bevy_verlet::prelude::*;
 
@@ -28,7 +28,7 @@ fn setup(mut commands: Commands) {
             let mut cmd = commands.spawn((
                 SpriteBundle {
                     sprite: Sprite {
-                        color: if j == 0 { RED } else { WHITE },
+                        color: if j == 0 { RED.into() } else { WHITE.into() },
                         custom_size: Some(Vec2::splat(10.)),
                         ..Default::default()
                     },

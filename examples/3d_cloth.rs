@@ -1,4 +1,4 @@
-use bevy::color::css::{RED, WHITE};
+use bevy::color::palettes::css::{RED, WHITE};
 use bevy::prelude::*;
 use bevy_verlet::prelude::*;
 
@@ -30,8 +30,8 @@ fn setup(
         transform: Transform::from_xyz(-50., 0., -50.).looking_at(Vec3::ZERO, Vec3::Y),
         ..Default::default()
     });
-    let material = materials.add(WHITE);
-    let fixed_material = materials.add(RED);
+    let material = materials.add(Color::from(WHITE));
+    let fixed_material = materials.add(Color::from(RED));
     let mesh = meshes.add(Cuboid::new(1., 1., 1.));
     let stick_length: f32 = 2.;
     let (origin_x, origin_y) = (-5., 10.);
