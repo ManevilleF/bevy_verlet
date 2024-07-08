@@ -1,5 +1,7 @@
-use bevy::color::palettes::css::{RED, WHITE};
-use bevy::prelude::*;
+use bevy::{
+    color::palettes::css::{RED, WHITE},
+    prelude::*,
+};
 use bevy_verlet::prelude::*;
 
 fn main() {
@@ -34,7 +36,7 @@ fn setup_free_line(
     mut meshes: ResMut<Assets<Mesh>>,
 ) {
     let material = materials.add(Color::from(WHITE));
-    let fixed_material = materials.add(Color:::from(RED));
+    let fixed_material = materials.add(Color::from(RED));
     let mesh = meshes.add(Cuboid::new(1., 1., 1.));
     let stick_length: f32 = 2.;
     let points_count = 10;
@@ -72,8 +74,8 @@ fn setup_fixed_line(
     mut materials: ResMut<Assets<StandardMaterial>>,
     mut meshes: ResMut<Assets<Mesh>>,
 ) {
-    let material = materials.add(WHITE);
-    let fixed_material = materials.add(RED);
+    let material = materials.add(Color::from(WHITE));
+    let fixed_material = materials.add(Color::from(RED));
     let mesh = meshes.add(Cuboid::new(1., 1., 1.));
     let stick_length: f32 = 2.;
     let points_count = 20;

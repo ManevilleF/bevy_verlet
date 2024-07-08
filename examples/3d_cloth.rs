@@ -1,5 +1,7 @@
-use bevy::color::palettes::css::{RED, WHITE};
-use bevy::prelude::*;
+use bevy::{
+    color::palettes::css::{RED, WHITE},
+    prelude::*,
+};
 use bevy_verlet::prelude::*;
 
 fn main() {
