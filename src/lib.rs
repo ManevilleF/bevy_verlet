@@ -42,6 +42,7 @@
 #![warn(
     clippy::nursery,
     clippy::pedantic,
+    clippy::unwrap_used,
     nonstandard_style,
     rustdoc::broken_intra_doc_links
 )]
@@ -69,6 +70,7 @@ use systems::{
 pub mod prelude {
     pub use crate::{components::*, config::*, VerletPlugin};
 }
+
 /// Plugin for Verlet physics
 #[derive(Debug, Copy, Clone, Default)]
 pub struct VerletPlugin {

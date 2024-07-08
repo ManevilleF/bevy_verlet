@@ -29,6 +29,7 @@ version = "0.14"
 features = [
   "bevy_render",
   "bevy_winit",
+  "bevy_color",
   "bevy_core_pipeline",
   "bevy_sprite",
   "bevy_pbr",
