@@ -2,6 +2,9 @@
 
 ## Unreleased
 
+* Bevy 0.14 (#17)
+* Physics improvements (#16)
+
 ## 0.8.0
 
 * Bevy 0.13 support (#15)
