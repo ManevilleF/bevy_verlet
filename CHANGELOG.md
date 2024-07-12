@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## 0.9.0
+
 * Bevy 0.14 (#17)
 * Physics improvements (#16)
 
