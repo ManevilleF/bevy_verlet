@@ -50,7 +50,7 @@ fn setup_free_line(
             Name::new(format!("Point {}", i)),
         ));
         if previous_entity.is_none() {
-            cmd.insert((VerletLocked, fixed_material.clone()));
+            cmd.insert((VerletLocked, MeshMaterial3d(fixed_material.clone())));
         }
         let entity = cmd.id();
         if let Some(e) = previous_entity {
@@ -83,12 +83,12 @@ fn setup_fixed_line(
         let mut cmd = commands.spawn((
             MeshMaterial3d(material.clone()),
             Mesh3d(mesh.clone()),
-            Transform::from_xyz(start + (i * 2) as f32, 0., 0.),
+            Transform::from_xyz(start_pos + (i * 2) as f32, 0., 0.),
             VerletPoint::default(),
             Name::new(format!("Point {}", i)),
         ));
         if previous_entity.is_none() || i == points_count {
-            cmd.insert((VerletLocked, fixed_material.clone()));
+            cmd.insert((VerletLocked, MeshMaterial3d(fixed_material.clone())));
         }
         let entity = cmd.id();
         if let Some(e) = previous_entity {
