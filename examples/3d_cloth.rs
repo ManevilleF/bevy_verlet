@@ -53,7 +53,7 @@ fn setup(
                 Name::new(format!("Point {}", i)),
             ));
             if j == 0 {
-                cmd.insert((VerletLocked, fixed_material.clone()));
+                cmd.insert((VerletLocked, MeshMaterial3d(fixed_material.clone())));
             }
             entities.push(cmd.id());
         }
