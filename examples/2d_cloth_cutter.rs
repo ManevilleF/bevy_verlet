@@ -20,7 +20,7 @@ fn main() {
 }
 
 fn setup(mut commands: Commands) {
-    commands.spawn(Camera2dBundle::default());
+    commands.spawn(Camera2d::default());
     let stick_length: f32 = 11.;
     let (origin_x, origin_y) = (-690., 420.);
     let (points_x_count, points_y_count) = (139, 80);
@@ -28,11 +28,11 @@ fn setup(mut commands: Commands) {
     for j in 0..points_y_count {
         for i in 0..points_x_count {
             let mut cmd = commands.spawn((
-                TransformBundle::from_transform(Transform::from_xyz(
+                Transform::from_xyz(
                     origin_x + (10. * i as f32),
                     origin_y + (-10. * j as f32),
                     0.,
-                )),
+                ),
                 VerletPoint::new(0.1),
                 Name::new(format!("Point {}", i)),
             ));

@@ -17,7 +17,7 @@ fn main() {
 }
 
 fn setup_camera(mut commands: Commands) {
-    commands.spawn(Camera2dBundle::default());
+    commands.spawn(Camera2d::default());
 }
 
 fn setup_free_line(mut commands: Commands) {
@@ -26,7 +26,12 @@ fn setup_free_line(mut commands: Commands) {
     let mut previous_entity = None;
     for i in 0..=points_count {
         let mut cmd = commands.spawn((
-            sprite_bundle(Color::WHITE, Vec2::new(50. * i as f32, 300.)),
+            Sprite {
+                color: Color::WHITE,
+                custom_size: Some(Vec2::splat(10.)),
+                ..default()
+            },
+            Transform::from_xyz(50.0 * i as f32, 300.0, 0.),
             VerletPoint::new(0.1),
             Name::new(format!("Point {}", i)),
         ));
@@ -55,7 +60,12 @@ fn setup_fixed_line(mut commands: Commands) {
     let mut previous_entity = None;
     for i in 0..=points_count {
         let mut cmd = commands.spawn((
-            sprite_bundle(Color::WHITE, Vec2::new(start_pos + 30. * i as f32, 0.)),
+            Sprite {
+                color: Color::WHITE,
+                custom_size: Some(Vec2::splat(10.)),
+                ..default()
+            },
+            Transform::from_xyz(start_pos + 30.0 * i as f32, 0.0, 0.),
             VerletPoint::default(),
             Name::new(format!("Point {}", i)),
         ));
@@ -74,17 +84,5 @@ fn setup_fixed_line(mut commands: Commands) {
             ));
         }
         previous_entity = Some(entity);
-    }
-}
-
-fn sprite_bundle(color: Color, pos: Vec2) -> SpriteBundle {
-    SpriteBundle {
-        sprite: Sprite {
-            color,
-            custom_size: Some(Vec2::splat(10.)),
-            ..Default::default()
-        },
-        transform: Transform::from_xyz(pos.x, pos.y, 0.),
-        ..Default::default()
     }
 }

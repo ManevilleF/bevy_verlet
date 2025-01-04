@@ -35,7 +35,7 @@ pub fn update_points(
                     &mut point,
                     gravity,
                     friction,
-                    time.delta_seconds(),
+                    time.delta_secs(),
                 );
             });
     } else {
@@ -45,7 +45,7 @@ pub fn update_points(
                 &mut point,
                 gravity,
                 friction,
-                time.delta_seconds(),
+                time.delta_secs(),
             );
         }
     }

@@ -28,10 +28,10 @@ fn setup(
     mut materials: ResMut<Assets<StandardMaterial>>,
     mut meshes: ResMut<Assets<Mesh>>,
 ) {
-    commands.spawn(Camera3dBundle {
-        transform: Transform::from_xyz(-50., 0., -50.).looking_at(Vec3::ZERO, Vec3::Y),
-        ..Default::default()
-    });
+    commands.spawn((
+        Camera3d::default(),
+        Transform::from_xyz(-50., 0., -50.).looking_at(Vec3::ZERO, Vec3::Y),
+    ));
     let material = materials.add(Color::from(WHITE));
     let fixed_material = materials.add(Color::from(RED));
     let mesh = meshes.add(Cuboid::new(1., 1., 1.));
@@ -42,21 +42,18 @@ fn setup(
     for j in 0..points_y_count {
         for i in 0..points_x_count {
             let mut cmd = commands.spawn((
-                PbrBundle {
-                    mesh: mesh.clone(),
-                    material: material.clone(),
-                    transform: Transform::from_xyz(
-                        origin_x + (2.0 * i as f32),
-                        origin_y + (2.0 * (j + i / 2) as f32),
-                        0.,
-                    ),
-                    ..Default::default()
-                },
+                Mesh3d(mesh.clone()),
+                MeshMaterial3d(material.clone()),
+                Transform::from_xyz(
+                    origin_x + (2.0 * i as f32),
+                    origin_y + (2.0 * (j + i / 2) as f32),
+                    0.,
+                ),
                 VerletPoint::default(),
                 Name::new(format!("Point {}", i)),
             ));
             if j == 0 {
-                cmd.insert((VerletLocked, fixed_material.clone()));
+                cmd.insert((VerletLocked, MeshMaterial3d(fixed_material.clone())));
             }
             entities.push(cmd.id());
         }
