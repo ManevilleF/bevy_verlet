@@ -6,7 +6,7 @@ fn main() {
         .add_plugins(DefaultPlugins.set(WindowPlugin {
             primary_window: Some(Window {
                 title: "2D line".to_string(),
-                resolution: (1000., 800.).into(),
+                resolution: (1000, 800).into(),
                 ..default()
             }),
             ..default()

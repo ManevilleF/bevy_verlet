@@ -3,7 +3,7 @@ use crate::{
     components::{VerletLocked, VerletPoint, VerletStick},
     VerletConfig, VerletStickMaxTension,
 };
-use bevy::{log, prelude::*, utils::HashMap};
+use bevy::{log, platform::collections::HashMap, prelude::*};
 
 #[allow(
     clippy::type_complexity,
@@ -21,7 +21,7 @@ pub fn update_sticks(
         .collect();
     for _ in 0..=config.sticks_computation_depth {
         for stick in sticks_query.iter() {
-            let Some([(ref mut transform_a, a_locked), (ref mut transform_b, b_locked)]) =
+            let [Some((ref mut transform_a, a_locked)), Some((ref mut transform_b, b_locked))] =
                 points_map.get_many_mut([&stick.point_a_entity, &stick.point_b_entity])
             else {
                 log::error!("Could not find point entities for stick {stick:?}");
@@ -81,14 +81,14 @@ pub fn handle_stick_constraints(
             .for_each(|(entity, stick, max_tension)| {
                 if should_delete_stick(stick, **max_tension, &points_query) {
                     par_commands.command_scope(|mut cmd| {
-                        cmd.entity(entity).despawn_recursive();
+                        cmd.entity(entity).despawn();
                     });
                 }
             });
     } else {
         for (entity, stick, max_tension) in sticks_query.iter() {
             if should_delete_stick(stick, **max_tension, &points_query) {
-                commands.entity(entity).despawn_recursive();
+                commands.entity(entity).despawn();
             }
         }
     }

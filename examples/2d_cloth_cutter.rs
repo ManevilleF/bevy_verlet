@@ -8,7 +8,7 @@ fn main() {
         .add_plugins(DefaultPlugins.set(WindowPlugin {
             primary_window: Some(Window {
                 title: "2D Cloth cutter".to_string(),
-                resolution: (1400., 900.).into(),
+                resolution: (1400, 900).into(),
                 ..default()
             }),
             ..default()
@@ -91,7 +91,7 @@ fn cut_sticks(
     if !mouse_input.pressed(MouseButton::Right) {
         return;
     }
-    let window = windows.single();
+    let Ok(window) = windows.single() else { return };
     let p = match window.cursor_position() {
         None => return,
         Some(p) => mouse_coords(window, p),
@@ -108,7 +108,7 @@ fn cut_sticks(
             && distance_b > 0.
             && distance_b <= MOUSE_RADIUS
         {
-            commands.entity(entity).despawn_recursive();
+            commands.entity(entity).despawn();
         }
     }
 }
@@ -123,7 +123,7 @@ fn drag_points(
         *dragged = vec![];
         return;
     }
-    let window = windows.single();
+    let Ok(window) = windows.single() else { return };
     let p = match window.cursor_position() {
         None => return,
         Some(p) => mouse_coords(window, p),
