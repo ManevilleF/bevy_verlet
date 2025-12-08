@@ -91,7 +91,7 @@ impl Plugin for VerletPlugin {
             );
         } else {
             app.add_systems(FixedUpdate, system_set);
-        };
+        }
         #[cfg(feature = "debug")]
         {
             app.add_systems(PostUpdate, systems::debug::debug_draw_sticks);

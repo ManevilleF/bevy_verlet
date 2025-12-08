@@ -19,13 +19,16 @@ debug = ["bevy/bevy_gizmos", "bevy/bevy_render"]
 [dependencies]
 
 [dependencies.bevy]
-version = "0.15"
+version = "0.17"
 default-features = false
+features = [
+    "bevy_log"
+]
 
 [dev-dependencies]
 
 [dev-dependencies.bevy]
-version = "0.15"
+version = "0.17"
 features = [
     "bevy_render",
     "bevy_winit",
