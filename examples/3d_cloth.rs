@@ -9,7 +9,7 @@ fn main() {
         .add_plugins(DefaultPlugins.set(WindowPlugin {
             primary_window: Some(Window {
                 title: "3D cloth".to_string(),
-                resolution: (1000., 800.).into(),
+                resolution: (1000, 800).into(),
                 ..default()
             }),
             ..default()

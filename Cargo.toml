@@ -30,16 +30,21 @@ features = [
 [dev-dependencies.bevy]
 version = "0.17"
 features = [
-    "bevy_render",
+    "bevy_asset",
     "bevy_winit",
-    "bevy_window",
-    "bevy_color",
     "bevy_core_pipeline",
-    "bevy_sprite",
     "bevy_pbr",
+    "bevy_render",
+    "bevy_color",
+    "bevy_sprite",
+    "bevy_camera",
+    "bevy_light",
+    "bevy_sprite_render",
     "x11",
     "multi_threaded",
     "tonemapping_luts",
+    "reflect_auto_register",
+    "zstd_rust"
 ]
 default-features = false
 
