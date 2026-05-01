@@ -12,6 +12,7 @@ use std::ops::Deref;
 ///
 /// [`VerletStick`]: crate::VerletStick
 #[derive(Debug, Copy, Clone, Component, Reflect)]
+#[repr(transparent)]
 pub struct VerletStickMaxTension(pub f32);
 
 impl Default for VerletStickMaxTension {
@@ -23,6 +24,7 @@ impl Default for VerletStickMaxTension {
 impl Deref for VerletStickMaxTension {
     type Target = f32;
 
+    #[inline]
     fn deref(&self) -> &Self::Target {
         &self.0
     }

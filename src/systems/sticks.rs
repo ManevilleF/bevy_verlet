@@ -22,7 +22,7 @@ pub fn update_sticks(
     for _ in 0..=config.sticks_computation_depth {
         for stick in sticks_query.iter() {
             let [Some((ref mut transform_a, a_locked)), Some((ref mut transform_b, b_locked))] =
-                points_map.get_many_mut([&stick.point_a_entity, &stick.point_b_entity])
+                points_map.get_disjoint_mut([&stick.point_a_entity, &stick.point_b_entity])
             else {
                 log::error!("Could not find point entities for stick {stick:?}");
                 continue;

@@ -1,7 +1,6 @@
 use crate::{VerletPoint, VerletStick};
 use bevy::prelude::*;
 
-#[allow(clippy::needless_pass_by_value)]
 pub fn debug_draw_sticks(
     mut gizmos: Gizmos,
     sticks_query: Query<&VerletStick>,

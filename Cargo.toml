@@ -13,13 +13,13 @@ readme = "README.md"
 documentation = "https://docs.rs/bevy_verlet"
 
 [features]
-default = []
-debug = ["bevy/bevy_gizmos", "bevy/bevy_render"]
+default = ["debug"]
+debug = ["bevy/bevy_gizmos", "bevy/bevy_gizmos_render"]
 
 [dependencies]
 
 [dependencies.bevy]
-version = "0.17"
+version = "0.18"
 default-features = false
 features = [
     "bevy_log"
@@ -28,7 +28,7 @@ features = [
 [dev-dependencies]
 
 [dev-dependencies.bevy]
-version = "0.17"
+version = "0.18"
 features = [
     "bevy_asset",
     "bevy_winit",
