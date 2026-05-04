@@ -17,7 +17,7 @@ fn update_point(
     point.old_position = Some(position);
 }
 
-#[allow(clippy::needless_pass_by_value, clippy::cast_possible_truncation)]
+#[allow(clippy::cast_possible_truncation)]
 pub fn update_points(
     mut points_query: Query<(&mut Transform, &mut VerletPoint), Without<VerletLocked>>,
     time: Res<Time>,

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+* Bevy 0.18 (#20)
+
 ## 0.10.0
 
 * Bevy 0.17
